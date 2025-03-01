@@ -1,5 +1,11 @@
 require 'sqlite3'
 
+db = SQLite3::Database.new('db/listings.sqlite')
+db.results_as_hash = true
+
+listings = db.execute('SELECT * FROM listings')
+puts listings.inspect
+
 class Seeder
 
   def self.seed!
@@ -18,11 +24,13 @@ class Seeder
               id INTEGER PRIMARY KEY AUTOINCREMENT,
               name TEXT NOT NULL,
               description TEXT,
-              cost TEXT NOT NULL)')
+              cost NUMBER NOT NULL,
+              image FILE)')
     end
 
     def self.populate_tables
-      db.execute('INSERT INTO listings (name, description, cost) VALUES ("GAMMAL SAAB", "Rostig men fungerar fantastiskt", "10000")')
+      db.execute('INSERT INTO listings (name, description, cost, image) VALUES ("GAMMAL SAAB", "Rostig men fungerar fantastiskt", "10000", "img/garbage_truck")')
+      db.execute('INSERT INTO listings (name, description, cost, image) VALUES ("BANANSKAL", "Gult skal", "100000", "")')
     end
 
     private

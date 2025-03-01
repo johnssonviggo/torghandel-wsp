@@ -1,9 +1,14 @@
 <script>
+// @ts-nocheck
+
   import Navbar from "../components/Navbar.svelte";
-  import {onMount} from "svelte";
+  import { onMount } from "svelte";
 
   let message = "Loading...";
-  
+
+  let name = "";
+  let description = "";
+  let cost = "";
 
   onMount(async () => {
     try {
@@ -16,30 +21,24 @@
     }
   });
 
-
-
   console.log("Hello world!");
 
-  // let myAge = 18;
-  // let elias_message = "Elias är " + myAge + " år";
-
-  // function increaseAge() {
-  //   myAge += 1;
-
-  //   if (myAge >= 100) {
-  //     elias_message = "Elias är död";
-  //   } else {
-  //     elias_message = "Elias är " + myAge + " år";
-  //   }
-  // }
 </script>
 
-<!-- <h1 class="my-title">{elias_message}</h1>
-<button on:click={increaseAge}>Öka ålder</button> -->
 
-{message.length}
+<main>
+  {#each message as item}
+    <div class="">
+      {item.name}
+      {item.description}
+      {item.cost}
+      {item.image}
+    </div>
+  {/each}
+</main>
 
 <style>
+  @reference "tailwindcss/theme";
   /* .my-title {
     font-size: 10rem;
   } */

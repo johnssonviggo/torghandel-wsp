@@ -45,5 +45,17 @@ class App < Sinatra::Base
 
     end
 
+    post '/api/listings' do
+        data = JSON.parse(request.body.read)
+        name = data["name"]
+        description = data["description"]
+        cost = data["cost"]
+        path = File.join("./public/uploaded_pictures/",params[:file][:filename])
+        File.write(path,File.read(params[:file][:tempfile]))
+        db.execute('INSERT INTO listings (name, description, cost) VALUES (?,?,?)',
+                    [name, description, cost])
+        {content: @listings}.to_json
+    end
+
 
 end
