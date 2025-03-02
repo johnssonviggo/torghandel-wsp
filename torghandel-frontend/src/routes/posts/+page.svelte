@@ -29,6 +29,7 @@
   function handleCancel() {
     formData = { name: "", description: "", cost: "", image: null };
   }
+
 </script>
 
 <form on:submit={handleSubmit} enctype="multipart/form-data">
@@ -59,12 +60,12 @@
   bind:value={formData.image}
    class="border border-black">
 </div>
-  <button type="submit" class=" bg-lime-400 p-3 ml-5 mt-5 rounded-xl text-xl"
-    >Lägg till</button
-  >
+  <button type="submit" class=" bg-lime-400 p-3 ml-5 mt-5 rounded-xl text-xl">
+    Lägg till
+    </button>
   <button
     type="button"
     on:click={handleCancel}
-    class=" bg-gray-400 p-3 ml-5 mt-5 rounded-xl text-xl">Avbryt</button
-  >
+    class=" bg-gray-400 p-3 ml-5 mt-5 rounded-xl text-xl">Avbryt
+  </button>
 </form>

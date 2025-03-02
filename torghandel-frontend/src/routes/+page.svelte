@@ -28,10 +28,14 @@
 
 <main>
   {#each message as item}
-    <div class="">
+    <div class=" mt-10 ms-5 p-5">
+      <div class=" font-semibold text-lg bg-amber-50">
       {item.name}
+    </div>
+    <div class=" bg-pink-400">
       {item.description}
-      {item.cost}
+      {item.cost} Kronor
+    </div>
       {item.image}
     </div>
   {/each}

@@ -1,25 +1,13 @@
 <script>
 </script>
 
-<nav class="navigation">
+<nav class=" flex bg-gradient-to-r from-green-400 via-green-600 to-green-400 h-20">
+  <div class=" mt-5 ms-5 space-x-10 text-2xl font-semibold no-underline text-black">
     <a href="/">Hem</a>
     <a href="/login">Logga in</a>
     <a href="/posts">ladda upp</a>
+  </div>
 </nav>
 
-<style>
-  .navigation {
-    display: flex;
-    height: 128px;
-    background-color: aquamarine;
-    font-weight: 600;
-    font-size: 2rem;
-    align-items: center;
-  }
-  
-  .navigation a {
-    margin-left: 80px;
-    color: black;
-    text-decoration: none;
-  }
-</style>
+
+

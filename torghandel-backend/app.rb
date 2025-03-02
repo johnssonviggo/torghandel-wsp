@@ -50,10 +50,10 @@ class App < Sinatra::Base
         name = data["name"]
         description = data["description"]
         cost = data["cost"]
-        path = File.join("./public/uploaded_pictures/",params[:file][:filename])
+        path = File.join("./public/img/",params[:file][:filename])
         File.write(path,File.read(params[:file][:tempfile]))
-        db.execute('INSERT INTO listings (name, description, cost) VALUES (?,?,?)',
-                    [name, description, cost])
+        db.execute('INSERT INTO listings (name, description, cost, image) VALUES (?,?,?,?)',
+                    [name, description, cost, image])
         {content: @listings}.to_json
     end
 
