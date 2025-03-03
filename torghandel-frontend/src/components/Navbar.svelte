@@ -7,6 +7,9 @@
     <a href="/login">Logga in</a>
     <a href="/posts">ladda upp</a>
   </div>
+  <div class="  text-3xl font-bold">
+  Torghandel
+  </div>
 </nav>
 
 

@@ -25,11 +25,11 @@ class Seeder
               name TEXT NOT NULL,
               description TEXT,
               cost NUMBER NOT NULL,
-              image FILE)')
+              image FILE NOT NULL)')
     end
 
     def self.populate_tables
-      db.execute('INSERT INTO listings (name, description, cost, image) VALUES ("GAMMAL SAAB", "Rostig men fungerar fantastiskt", "10000", "/img/garbage_truck")')
+      db.execute('INSERT INTO listings (name, description, cost, image) VALUES ("GAMMAL SAAB", "Rostig men fungerar fantastiskt", "10000", "garbage_truck.jpg")')
       db.execute('INSERT INTO listings (name, description, cost, image) VALUES ("BANANSKAL", "Gult skal", "100000", "")')
     end
 
