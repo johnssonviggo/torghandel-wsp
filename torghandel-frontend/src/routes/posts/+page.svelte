@@ -1,4 +1,5 @@
 <script>
+  //@ts-nocheck
   import { onMount } from "svelte";
   import { goto } from "$app/navigation"; // Import navigation helper
 
@@ -102,43 +103,4 @@ name = "";
   </button>
 
 </form>
-<!-- <form on:submit={handleSubmit} enctype="multipart/form-data">
-  <div class=" flex flex-row bg-blue-400 ml-5 mt-5 text-xl">
-    Namn: <input
-      class="border border-black ml-3"
-      bind:value={formData.name}
-      required
-    />
-  </div>
-  <div class="mt-5 ml-5 bg-amber-400 text-xl">
-    Beskrivning: <input
-      class="border border-black ml-3"
-      bind:value={formData.description}
-      required
-    />
-  </div>
-  <div class="ml-5 mt-5 bg-pink-400 text-xl">
-    Kostnad: <input
-      type="number"
-      class="border border-black ml-3"
-      bind:value={formData.cost}
-      required
-    />
-  </div>
-  <div class="ml-5 mt-5 bg-purple-400">
-    <input
-      type="file"
-      bind:value={formData.image}
-      class="border border-black"
-    />
-  </div>
-  <button type="submit" class=" bg-lime-400 p-3 ml-5 mt-5 rounded-xl text-xl">
-    Lägg till
-  </button>
-  <button
-    type="button"
-    on:click={handleCancel}
-    class=" bg-gray-400 p-3 ml-5 mt-5 rounded-xl text-xl"
-    >Avbryt
-  </button>
-</form> -->
+

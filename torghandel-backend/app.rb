@@ -67,27 +67,21 @@ class App < Sinatra::Base
 
     end
 
+    get '/api/listings/:id' do
+        id = params[:id]
+        listing = db.execute('SELECT * FROM listings WHERE id=?', [id]).first
+
+        if listing
+            listing["image_url"] = listing["image"] ? "http://localhost:9292/img/#{listing['image']}" : "https://via.placeholder.com/150"
+            content_type :json
+            listing.to_json
+        else
+            halt 404, { message: "Listing not found" }.to_json
+        end
+    end
+
     post '/api/listings' do
-        # data = JSON.parse(request.body.read)
-
-        # p data
-
-        # name = data["name"]
-        # description = data["description"]
-        # cost = data["cost"]
-
-        # fp = data["image"]
-
-        # p fp
-
-        #path = File.join("./public/img/",data["file"])
-
-       # File.write(path,File.read(params[:file][:tempfile]))
-       # db.execute('INSERT INTO listings (name, description, cost, image) VALUES (?,?,?,?)',
-       #             [name, description, cost, image])
-       # {content: @listings}.to_json
-
-       name = params[:name]
+        name = params[:name]
         description = params[:description]
         cost = params[:cost]
         image_filename = ""
@@ -114,5 +108,60 @@ class App < Sinatra::Base
         { message: "Listing created", image_url: "http://localhost:9292/img/#{image_filename}" }.to_json
     end
 
+    post '/api/listings/:id/delete' do
 
+        id = params[:id]
+        db.execute('DELETE FROM listings WHERE id=?', [id])
+
+        @listings = db.execute('SELECT * FROM listings')
+
+  # Optionally, you can include the images as you did in the previous code
+        @listings.each do |listing|
+          if listing["image"] && !listing["image"].empty?
+            listing["image_url"] = "http://localhost:9292/img/#{listing['image']}"
+          else
+            listing["image_url"] = "https://via.placeholder.com/150"
+          end
+        end
+
+        content_type :json
+        {content: @listings}.to_json
+        {message: "Listing deleted"}.to_json
+    end
+
+    post '/api/listings/:id/update' do
+        p params # Print params to debug
+        id = params[:id]
+        p "ID received: #{id}" # ✅ Print the ID to debug
+
+        if id.nil? || id.strip.empty?
+            halt 400, { message: "Invalid ID" }.to_json # ✅ Stop if ID is missing
+        end
+
+        name = params[:name]
+        description = params[:description]
+        cost = params[:cost]
+        image_filename = nil
+
+        if params[:image] && params[:image][:tempfile]
+            image = params[:image][:tempfile]
+            image_filename = params[:image][:filename]
+
+            FileUtils.mkdir_p("public/img")
+            path = File.join("public/img", image_filename)
+
+            File.open(path, "wb") do |file|
+                file.write(image.read)
+            end
+
+            db.execute('UPDATE listings SET name=?, description=?, cost=?, image=? WHERE id=?',
+                       [name, description, cost, image_filename, id])
+        else
+            db.execute('UPDATE listings SET name=?, description=?, cost=? WHERE id=?',
+                       [name, description, cost, id])
+        end
+
+        content_type :json
+        { message: "Listing updated successfully" }.to_json
+    end
 end
