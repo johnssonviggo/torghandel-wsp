@@ -48,38 +48,45 @@
 
 <main>
   {#each message as item}
-  <!-- svelte-ignore a11y_missing_attribute -->
-  <div class=" flex mt-10 ms-5 p-5 bg-[#CDCDCD]">
-      <div class=" flex-1 max-w-100">
-       <img class=" max-h-140 max-w-140" src={item.image_url} />
-     </div>
+  <div class="flex mt-10 ms-5 p-5 bg-[#EEEEEE] max-w-5xl rounded-lg shadow-md">
+    
+    
+    <!-- svelte-ignore a11y_img_redundant_alt -->
+    <div class="flex-shrink-0">
+      <img class="h-100 w-100 object-cover rounded-lg" src={item.image_url} alt="Item Image" />
+    </div>
 
-      <div class=" flex-1 font-semibold text-2xl mb-4">
+    <div class="flex flex-col ml-5">
+      <div class="font-semibold text-[#393E46] text-2xl mb-2">
         {item.name}
       </div>
 
-      <div class=" flex-1 text-md">
+      <div class="text-md text-[#393E46] mb-2">
         {item.description}
+      </div>
+
+      <div class="text-lg text-[#393E46] font-bold">
         {item.cost} Kronor
       </div>
 
-
-      <div class=" flex-1 space-x-10">
+      <div class="mt-4 space-x-4">
         <button 
           on:click={() => deleteListing(item.id)} 
-          class="mt-4 p-2 bg-red-500 text-white rounded font-bold"
-          >
+          class="p-2 bg-red-500 text-white rounded font-bold"
+        >
           Ta bort
         </button>
 
         <button
-        on:click={() => editListing(item)}
-        class="mt-4 p-2 bg-yellow-500 text-white rounded font-bold">
+          on:click={() => editListing(item)}
+          class="p-2 bg-yellow-500 text-white rounded font-bold"
+        >
           Ändra
         </button> 
       </div>
-
     </div>
+
+  </div>
   {/each}
 </main>
 

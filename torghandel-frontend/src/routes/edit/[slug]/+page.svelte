@@ -17,7 +17,7 @@
   //$: id = $page.params.slug;
   $: slug = $page.params.slug;
 
-  console.log(slug)
+  console.log(slug);
 
   //     export function load({ params }) {
   //     const slug = params.slug; // This gives you the slug (e.g., "1" if the route is /blog/1)
@@ -29,7 +29,7 @@
   //     console.log(id)
 
   // Fetch the listing details
-  onMount(async () => { 
+  onMount(async () => {
     try {
       const res = await fetch(`http://localhost:9292/api/listings/${slug}`);
       const data = await res.json();
@@ -70,52 +70,70 @@
 
       const data = await res.json();
       console.log("Updated successfully:", data);
-    //   alert("Listing updated!");
-      goto('/')
+      //   alert("Listing updated!");
+      goto("/");
     } catch (error) {
       console.error("Error updating listing:", error);
     }
   };
 </script>
 
-<form on:submit={updateListing}>
-  <div class="flex flex-row bg-blue-400 ml-5 mt-5 text-xl">
-    Namn: <input class="border border-black ml-3" bind:value={name} required />
+<form
+  on:submit={updateListing}
+  class="bg-[#EEEEEE] max-w-3xl p-6 rounded-lg shadow-md ml-5 mt-20"
+>
+  <div class="flex flex-col space-y-4">
+    <label class="text-[#393E46] font-medium">
+      Namn:
+      <input
+        class="border border-[#CCCCCC] rounded-lg p-2 w-full mt-1 focus:outline-none focus:ring-2 focus:ring-[#222831]"
+        bind:value={name}
+        required
+      />
+    </label>
+
+    <label class="text-[#393E46] font-medium">
+      Beskrivning:
+      <input
+        class="border border-[#CCCCCC] rounded-lg p-2 w-full mt-1 focus:outline-none focus:ring-2 focus:ring-[#222831]"
+        bind:value={description}
+        required
+      />
+    </label>
+
+    <label class="text-[#393E46] font-medium">
+      Kostnad:
+      <input
+        type="number"
+        class="border border-[#CCCCCC] rounded-lg p-2 w-full mt-1 focus:outline-none focus:ring-2 focus:ring-[#222831]"
+        bind:value={cost}
+        required
+      />
+    </label>
+
+    <label class="text-[#393E46] font-medium">
+      Ladda upp bild:
+      <input
+        type="file"
+        class="border border-[#CCCCCC] rounded-lg p-2 w-full mt-1 focus:outline-none focus:ring-2 focus:ring-[#222831]"
+        on:change={handleFileChange}
+      />
+    </label>
+
+    <div class="flex space-x-4 mt-4">
+      <button
+        type="submit"
+        class="bg-[#00ADB5] text-white p-3 rounded-lg font-semibold transition hover:bg-[#007A80]"
+      >
+        Spara
+      </button>
+
+      <button
+        type="button"
+        class="bg-[#CCCCCC] text-[#393E46] p-3 rounded-lg font-semibold transition hover:bg-[#AAAAAA]"
+      >
+        Avbryt
+      </button>
+    </div>
   </div>
-
-  <div class="mt-5 ml-5 bg-amber-400 text-xl">
-    Beskrivning: <input
-      class="border border-black ml-3"
-      bind:value={description}
-      required
-    />
-  </div>
-
-  <div class="ml-5 mt-5 bg-pink-400 text-xl">
-    Kostnad: <input
-      type="number"
-      class="border border-black ml-3"
-      bind:value={cost}
-      required
-    />
-  </div>
-
-  <div class="ml-5 mt-5 bg-purple-400">
-    <input
-      type="file"
-      class="border border-black"
-      on:change={handleFileChange}
-    />
-  </div>
-
-  <button
-    type="submit"
-    class="bg-black p-3 ml-5 mt-5 rounded-xl text-xl text-white"
-  >
-    Spara
-  </button>
-
-  <button type="button" class="bg-gray-400 p-3 ml-5 mt-5 rounded-xl text-xl">
-    Avbryt
-  </button>
 </form>
