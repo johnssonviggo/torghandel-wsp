@@ -46,9 +46,9 @@
   console.log("Hello world!");
 </script>
 
-<main>
+<main class=" flex flex-col items-center">
   {#each message as item}
-  <div class="flex mt-10 ms-5 p-5 bg-[#EEEEEE] max-w-5xl rounded-lg shadow-md">
+  <div class="flex mt-15 p-5 bg-[#EEEEEE] w-full max-w-5xl rounded-lg shadow-md items-center">
     
     
     <!-- svelte-ignore a11y_img_redundant_alt -->
@@ -57,7 +57,7 @@
     </div>
 
     <div class="flex flex-col ml-5">
-      <div class="font-semibold text-[#393E46] text-2xl mb-2">
+      <div class="font-semibold text-[#393E46] text-2xl mb-5">
         {item.name}
       </div>
 

@@ -1,6 +1,8 @@
 require 'json'
 require 'sinatra'
 require 'sinatra/cross_origin'
+require 'bcrypt'
+
 
 
 class App < Sinatra::Base
@@ -40,9 +42,10 @@ class App < Sinatra::Base
         {message: "Hello from Viggo." + " Jag testar lite grejer"}.to_json
     end
 
-    get '/login' do
-        "hej svejs"
+    get '/api/users' do
+        users = db.execute('SELECT id, username FROM users')  # Exclude password
         content_type :json
+        { users: users }.to_json
     end
 
     get '/api/listings' do
@@ -77,6 +80,53 @@ class App < Sinatra::Base
             listing.to_json
         else
             halt 404, { message: "Listing not found" }.to_json
+        end
+    end
+
+    get '/api/protected' do
+        if session[:user_id]
+            content_type :json
+            { message: "You are authorized", user_id: session[:user_id] }.to_json
+        else
+            halt 401, { message: "Unauthorized" }.to_json
+        end
+    end
+
+    # post '/api/register' do
+    #     username = params[:username]
+    #     password = params[:password]
+
+    #     existing_user = db.execute('SELECT * FROM users WHERE username=?', [username]).first
+    #     if existing_user
+    #         halt 400, { message: "Username already exists" }.to_json
+    #     end
+
+    #     hashed_password = BCrypt::Password.create(password)
+    #     db.execute('INSERT INTO users (username, password) VALUES (?, ?)', [username, hashed_password])
+
+    #     content_type :json
+    #     { message: "User registered successfully" }.to_json
+    # end
+
+
+    post '/api/login' do
+        data = JSON.parse(request.body.read)
+        p data
+
+        username = data["username"]
+        password = data["password"]
+
+        user = db.execute('SELECT * FROM users WHERE username=?', [username]).first
+        p username
+        p password
+        p user
+
+        if user && BCrypt::Password.new(user['password']) == password
+            session[:user_id] = user['id']
+            content_type :json
+            { message: "Login successful", user: { id: user['id'], username: user['username'] } }.to_json
+        else
+            halt 401, { message: "Invalid credentials" }.to_json
         end
     end
 
@@ -163,5 +213,11 @@ class App < Sinatra::Base
 
         content_type :json
         { message: "Listing updated successfully" }.to_json
+    end
+
+    post '/api/logout' do
+        session.clear
+        content_type :json
+        { message: "Logged out" }.to_json
     end
 end

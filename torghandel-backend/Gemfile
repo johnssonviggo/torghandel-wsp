@@ -6,6 +6,7 @@ gem 'sinatra'
 gem 'rerun'
 gem 'sqlite3'
 gem 'webrick'
+gem 'bcrypt'
 
 gem 'jason'
 gem 'sinatra-cross_origin'
