@@ -48,16 +48,18 @@
 
 <main class=" flex flex-col items-center">
   {#each message as item}
-  <div class="flex mt-15 p-5 bg-[#EEEEEE] w-full max-w-5xl rounded-lg shadow-md items-center">
+  <div class=" flex flex-col mt-15 p-5 bg-[#EEEEEE] w-full max-w-[90vw] rounded-lg shadow-md items-center
+  sm:flex-row sm:max-w-5xl">
     
     
     <!-- svelte-ignore a11y_img_redundant_alt -->
     <div class="flex-shrink-0">
-      <img class="h-100 w-100 object-cover rounded-lg" src={item.image_url} alt="Item Image" />
+      <img class=" h-100 w-100 object-cover rounded-lg" src={item.image_url} alt="Item Image" />
     </div>
 
-    <div class="flex flex-col ml-5">
-      <div class="font-semibold text-[#393E46] text-2xl mb-5">
+    <div class="flex flex-col ml-5 mt-4
+    sm:mt-0">
+      <div class="font-semibold text-[#393E46] text-2xl mb-3">
         {item.name}
       </div>
 
@@ -69,17 +71,17 @@
         {item.cost} Kronor
       </div>
 
-      <div class="mt-4 space-x-4">
+      <div class="mt-4 text-lg space-x-4 font-semibold">
         <button 
           on:click={() => deleteListing(item.id)} 
-          class="p-2 bg-red-500 text-white rounded font-bold"
+          class="p-3 bg-[#00ADB5] rounded-lg text-white transition hover:bg-[#007A80]"
         >
           Ta bort
         </button>
 
         <button
           on:click={() => editListing(item)}
-          class="p-2 bg-yellow-500 text-white rounded font-bold"
+          class="bg-[#CCCCCC] text-[#393E46] p-3 rounded-lg transition hover:bg-[#AAAAAA]"
         >
           Ändra
         </button> 

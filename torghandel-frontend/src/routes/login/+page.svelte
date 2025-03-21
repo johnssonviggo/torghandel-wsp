@@ -28,7 +28,8 @@
 </script>
 
 <form
-  class=" bg-[#EEEEEE] ml-5 mt-20 rounded-lg shadow-md text-lg max-w-3xl p-6"
+  class=" bg-[#EEEEEE] ml-5 mt-10 me-5 rounded-lg shadow-md text-lg max-w-3xl p-6
+  sm:me-0 sm:mt-20"
 >
   <div class=" flex flex-col text-[#393E46] font-medium">
     <label class="">
