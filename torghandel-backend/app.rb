@@ -3,6 +3,9 @@ require 'sinatra'
 require 'sinatra/cross_origin'
 require 'bcrypt'
 
+require_relative './models/users'
+require_relative './models/listings'
+
 
 
 class App < Sinatra::Base
@@ -30,18 +33,6 @@ class App < Sinatra::Base
         send_file File.join(settings.public_folder, 'img', params[:filename])
     end
 
-    get '/api/message' do
-        p "  API call to /api/message"
-        content_type :json
-        { message: "Hello from Sinatra!" }.to_json
-    end
-
-    get '/api/anothermessage' do
-        # p " API call to /api/anothermessage"
-        content_type :json
-        {message: "Hello from Viggo." + " Jag testar lite grejer"}.to_json
-    end
-
     get '/api/users' do
         users = db.execute('SELECT id, username FROM users')  # Exclude password
         content_type :json
@@ -49,25 +40,10 @@ class App < Sinatra::Base
     end
 
     get '/api/listings' do
-        @listings = db.execute('SELECT * FROM listings')
-
-        # @listings.each do |listing|
-        #     listing["image_url"] = "/img/#{listing['image']}"
-        # end
-
-        @listings.each do |listing|
-            if listing["image"] && !listing["image"].empty?
-              listing["image_url"] = "http://localhost:9292/img/#{listing['image']}"
-            else
-              listing["image_url"] = "https://via.placeholder.com/150"  # Placeholder image
-            end
-          end
-
-        p @listings
+        @listings = Listing.all
 
         content_type :json
         {content: @listings}.to_json
-
     end
 
     get '/api/listings/:id' do

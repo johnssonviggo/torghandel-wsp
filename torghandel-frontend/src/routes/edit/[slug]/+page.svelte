@@ -47,6 +47,10 @@
     imageFile = event.target.files[0]; // Get selected file
   }
 
+  function handleCancel() {
+  goto("/");
+}
+
   const updateListing = async () => {
     console.log("Updating listing with slug:", slug); // ✅ Debugging
 
@@ -70,12 +74,13 @@
 
       const data = await res.json();
       console.log("Updated successfully:", data);
-      //   alert("Listing updated!");
       goto("/");
     } catch (error) {
       console.error("Error updating listing:", error);
     }
   };
+
+
 </script>
 
 <form
@@ -130,6 +135,7 @@
 
       <button
         type="button"
+        on:click={handleCancel}
         class="bg-[#CCCCCC] text-[#393E46] p-3 rounded-lg font-semibold transition hover:bg-[#AAAAAA]"
       >
         Avbryt

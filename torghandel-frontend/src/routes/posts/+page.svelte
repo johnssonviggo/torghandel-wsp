@@ -118,8 +118,8 @@ sm:flex-row">
     </div>
 
   </form>
-  <div class="grid bg-[#EEEEEE] mx-5 mt-5 rounded-lg shadow-md text-lg max-w-3xl p-6 items-center
-  sm:mx-20 sm:mt-20">
+  <div class="grid bg-[#EEEEEE] mx-5 my-5 rounded-lg shadow-md text-lg max-w-3xl p-6 items-center
+  sm:mx-20 sm:mt-20 sm:mb-0">
     {#if showImage}
       <img src={imgSrc} alt="Preview" class="max-w-full rounded-lg shadow-md
       sm:max-w-xl" />
