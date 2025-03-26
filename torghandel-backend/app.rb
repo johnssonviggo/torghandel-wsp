@@ -5,6 +5,7 @@ require 'bcrypt'
 
 require_relative './models/users'
 require_relative './models/listings'
+require_relative './models/database'
 
 
 
@@ -12,10 +13,26 @@ class App < Sinatra::Base
 
     configure do
         enable :cross_origin
+        set :allow_origin, "*"
+        set :allow_methods, "GET, POST, OPTIONS"
+        set :allow_headers, "Content-Type, Authorization"
     end
 
     before do
         response.headers['Access-Control-Allow-Origin'] = '*'
+        response.headers["Access-Control-Allow-Methods"] = "GET, POST, OPTIONS"
+        response.headers["Access-Control-Allow-Headers"] = "Content-Type, Authorization"
+    end
+
+    set :allow_origin, "*"
+    set :allow_methods, "GET, POST, OPTIONS"
+    set :allow_headers, "Content-Type, Authorization"
+
+    options "*" do
+        response.headers["Access-Control-Allow-Origin"] = "*"
+        response.headers["Access-Control-Allow-Methods"] = "GET, POST, OPTIONS"
+        response.headers["Access-Control-Allow-Headers"] = "Content-Type, Authorization"
+        halt 200
     end
 
     def db
@@ -24,8 +41,8 @@ class App < Sinatra::Base
         @db = SQLite3::Database.new("db/listings.sqlite")
         @db.results_as_hash = true
 
-        return @db
-    end
+         return @db
+     end
 
     set :public_folder, 'public'
 
@@ -34,7 +51,7 @@ class App < Sinatra::Base
     end
 
     get '/api/users' do
-        users = db.execute('SELECT id, username FROM users')  # Exclude password
+        users = User.all
         content_type :json
         { users: users }.to_json
     end
@@ -48,10 +65,9 @@ class App < Sinatra::Base
 
     get '/api/listings/:id' do
         id = params[:id]
-        listing = db.execute('SELECT * FROM listings WHERE id=?', [id]).first
+        listing = Listing.find(params[:id])
 
         if listing
-            listing["image_url"] = listing["image"] ? "http://localhost:9292/img/#{listing['image']}" : "https://via.placeholder.com/150"
             content_type :json
             listing.to_json
         else
@@ -68,36 +84,36 @@ class App < Sinatra::Base
         end
     end
 
-    # post '/api/register' do
-    #     username = params[:username]
-    #     password = params[:password]
+    post '/api/register' do
+        data = JSON.parse(request.body.read)
+        username = data["username"]
+        password = data["password"]
 
-    #     existing_user = db.execute('SELECT * FROM users WHERE username=?', [username]).first
-    #     if existing_user
-    #         halt 400, { message: "Username already exists" }.to_json
-    #     end
+        existing_user = User.find_by_username(username)
+        if existing_user
+            halt 400, { message: "Username already exists" }.to_json
+        end
 
-    #     hashed_password = BCrypt::Password.create(password)
-    #     db.execute('INSERT INTO users (username, password) VALUES (?, ?)', [username, hashed_password])
+        User.create(username, password)
 
-    #     content_type :json
-    #     { message: "User registered successfully" }.to_json
-    # end
+        p username
+        p password
+
+        content_type :json
+        { message: "User registered successfully" }.to_json
+    end
 
 
     post '/api/login' do
         data = JSON.parse(request.body.read)
-        p data
 
         username = data["username"]
         password = data["password"]
 
-        user = db.execute('SELECT * FROM users WHERE username=?', [username]).first
-        p username
-        p password
-        p user
+        # user = db.execute('SELECT * FROM users WHERE username=?', [username]).first
+        user = User.find_by_username(data["username"])
 
-        if user && BCrypt::Password.new(user['password']) == password
+        if user && BCrypt::Password.new(user['password']) == data["password"]
             session[:user_id] = user['id']
             content_type :json
             { message: "Login successful", user: { id: user['id'], username: user['username'] } }.to_json
@@ -135,35 +151,15 @@ class App < Sinatra::Base
     end
 
     post '/api/listings/:id/delete' do
-
-        id = params[:id]
-        db.execute('DELETE FROM listings WHERE id=?', [id])
-
-        @listings = db.execute('SELECT * FROM listings')
-
-  # Optionally, you can include the images as you did in the previous code
-        @listings.each do |listing|
-          if listing["image"] && !listing["image"].empty?
-            listing["image_url"] = "http://localhost:9292/img/#{listing['image']}"
-          else
-            listing["image_url"] = "https://via.placeholder.com/150"
-          end
-        end
+        Listing.delete(params[:id])
+        @listings = Listing.all
 
         content_type :json
-        {content: @listings}.to_json
-        {message: "Listing deleted"}.to_json
+        {content: @listings, message: "Listing deleted"}.to_json
     end
 
     post '/api/listings/:id/update' do
-        p params # Print params to debug
         id = params[:id]
-        p "ID received: #{id}" # ✅ Print the ID to debug
-
-        if id.nil? || id.strip.empty?
-            halt 400, { message: "Invalid ID" }.to_json # ✅ Stop if ID is missing
-        end
-
         name = params[:name]
         description = params[:description]
         cost = params[:cost]
@@ -174,18 +170,10 @@ class App < Sinatra::Base
             image_filename = params[:image][:filename]
 
             FileUtils.mkdir_p("public/img")
-            path = File.join("public/img", image_filename)
-
-            File.open(path, "wb") do |file|
-                file.write(image.read)
-            end
-
-            db.execute('UPDATE listings SET name=?, description=?, cost=?, image=? WHERE id=?',
-                       [name, description, cost, image_filename, id])
-        else
-            db.execute('UPDATE listings SET name=?, description=?, cost=? WHERE id=?',
-                       [name, description, cost, id])
+            File.open(File.join("public/img", image_filename), "wb") { |file| file.write(image.read) }
         end
+
+        Listing.update(id, name, description, cost, image_filename)
 
         content_type :json
         { message: "Listing updated successfully" }.to_json

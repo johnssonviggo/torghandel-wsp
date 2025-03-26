@@ -3,7 +3,6 @@
   import { onMount } from "svelte";
   import { goto } from "$app/navigation"; // Import navigation helper
 
-  let anothermessage = "Loading...";
 
   // let formData = { name: "", description: "", cost: "", image: null };
 

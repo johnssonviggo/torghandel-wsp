@@ -1,14 +1,21 @@
 <script>
+  //@ts-nocheck
   import { onMount } from "svelte";
+  import { goto } from "$app/navigation";
+
     let username = "";
     let password = "";
     let message = "";
 
-    async function login() {
+    async function login(event) {
       console.log("password", password)
+      event.preventDefault(); // Prevents form from reloading the page
         const response = await fetch("http://localhost:9292/api/login", {
             method: "POST",
-            headers: { "Content-Type": "application/json" },
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json",
+    },
             body: JSON.stringify({ username, password })
         });
 
@@ -19,15 +26,15 @@
         if (response.ok) {
             localStorage.setItem("user", JSON.stringify(data.user));
             message = "Login successful!";
-            window.location.href = "/"; // Redirect to another page
-        } else {
+            await goto("/")
+          } else {
             message = data.message;
             alert("doo doo, no access")
         }
     }
 </script>
 
-<form
+<form on:submit={login}
   class=" bg-[#EEEEEE] ml-5 mt-10 me-5 rounded-lg shadow-md text-lg max-w-3xl p-6
   sm:me-0 sm:mt-20"
 >
@@ -44,16 +51,15 @@
     <label>
       Lösenord:
       <input type="password"
-        class=" border border-[#CCCCCC] rounded-lg p-2 w-full mt-1 focus:outline-none focus:ring-2 focus:ring-[#222831]"
         bind:value={password}
+        class=" border border-[#CCCCCC] rounded-lg p-2 w-full mt-1 focus:outline-none focus:ring-2 focus:ring-[#222831]"
         placeholder="Password"
       />
     </label>
 
     <div class=" flex space-x-4 mt-4">
-      <button
+      <button type="submit"
         class=" bg-[#00ADB5] text-white p-3 rounded-lg font-semibold transition hover:bg-[#007A80]"
-        on:click={login}
       >
         Logga in</button
       >

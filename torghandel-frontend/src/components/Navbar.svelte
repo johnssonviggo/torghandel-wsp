@@ -6,7 +6,8 @@
   sm:text-2xl sm:space-x-10 sm:flex">
     <a href="/">Hem</a>
     <a href="/login">Logga in</a>
-    <a href="/posts">ladda upp</a>
+    <a href="/register">Registrera</a>
+    <a href="/posts">Ladda upp</a>
   </div>
   <div class=" flex-1 text-center text-[#EEEEEE] self-center text-lg
   sm:text-2xl">

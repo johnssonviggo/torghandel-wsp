@@ -19,7 +19,8 @@ attr_accessor :id, :username, :password
   end
 
   def self.create(username, password)
-
+    hashed_password = BCrypt::Password.create(password)
+    Database.connection.execute('INSERT INTO users (username, password) VALUES (?, ?)', [username, hashed_password])
   end
 
 end

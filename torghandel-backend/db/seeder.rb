@@ -37,7 +37,7 @@ class Seeder
     end
 
     def self.populate_tables
-      password_hashed = BCrypt::Password.create("1234")
+      password_hashed = BCrypt::Password.create("d1npiZZ4!")
       p "Storing hashed version of password to db. Clear text never saved. #{password_hashed}"
       db.execute('INSERT INTO listings (name, description, cost, image) VALUES ("GAMMAL SAAB", "Rostig men fungerar fantastiskt", "10000", "garbage_truck.jpg")')
       db.execute('INSERT INTO listings (name, description, cost, image) VALUES ("BANANSKAL", "Gult skal", "100000", "")')
