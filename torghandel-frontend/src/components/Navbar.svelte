@@ -56,9 +56,10 @@
     <a href="/posts">Ladda upp</a>
     
     {#if user}  <!-- Show logout button only when logged in -->
-      <button on:click={logout} class=" text-[#EEEEEE] hover:text-2xl">
+      <!-- svelte-ignore a11y_invalid_attribute -->
+      <a href="#" on:click={logout} class=" text-[#EEEEEE] hover:text-2xl">
         Logga ut
-      </button>
+      </a>
     {/if}
   </div>
 
