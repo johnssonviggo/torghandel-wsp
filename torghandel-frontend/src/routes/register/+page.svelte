@@ -26,7 +26,7 @@
 
             const data = await response.json();
             console.log("User registered:", data);
-            goto("/");
+            goto("/login");
         } catch (error) {
             console.error("Network error:", error);
         }

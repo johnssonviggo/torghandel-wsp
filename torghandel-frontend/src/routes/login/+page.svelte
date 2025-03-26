@@ -65,4 +65,8 @@
       >
     </div>
   </div>
+  <div class=" mt-10">
+    <span>Har du inget konto? </span>
+    <a href="/register" class="text-[#00ADB5] p-2 rounded-lg font-semibold transition hover:text-[#007A80] ms-3">Registrera dig här!</a>
+  </div>
 </form>

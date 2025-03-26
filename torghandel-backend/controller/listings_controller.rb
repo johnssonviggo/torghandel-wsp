@@ -2,6 +2,10 @@ require_relative 'application_controller'
 require_relative '../models/listings'
 
 class ListingsController < ApplicationController
+  # get '/img/:filename' do
+  #   send_file File.join(settings.public_folder, 'img', params[:filename])
+  # end
+
   get '/api/listings' do
     content_type :json
     { content: Listing.all }.to_json
