@@ -45,12 +45,14 @@ class Seeder
     end
 
     private
-      def self.db
-        return @db if @db
-        @db = SQLite3::Database.new('db/listings.sqlite')
-    @db.results_as_hash = true
-    @db
-  end
+    
+    def self.db
+      return @db if @db
+
+      @db = SQLite3::Database.new('db/listings.sqlite')
+      @db.results_as_hash = true
+      @db
+    end
 end
 
 Seeder.seed!
