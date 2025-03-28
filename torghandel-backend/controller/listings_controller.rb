@@ -41,12 +41,23 @@ class ListingsController < ApplicationController
   end
 
   post '/api/listings/:id/delete' do
+    halt 401, { message: "Unauthorized" }.to_json unless session[:admin_id]  # Only admins can delete
+
+    listing = Listing.find(params[:id])
+    halt 404, { message: "Listing not found" }.to_json unless listing
+
+    # Listing.delete(params[:id])
+    # content_type :json
+    # { message: "Listing deleted" }.to_json
+
     Listing.delete(params[:id])
     content_type :json
-    { message: "Listing deleted" }.to_json
+    { message: "Listing deleted by admin" }.to_json
   end
 
   post '/api/listings/:id/update' do
+    halt 401, { message: "Unauthorized" }.to_json unless session[:admin_id]
+    
     name = params[:name]
     description = params[:description]
     cost = params[:cost]

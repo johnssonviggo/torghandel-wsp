@@ -3,3 +3,10 @@
 body {
     background-color: #CDCDCD;
 }
+
+:root {
+    --clr-card: #EEEEEE;
+    --clr-border: #CCCCCC;
+    --blu-btn: #00ADB5;
+    --gr-txt: #393E46;
+}

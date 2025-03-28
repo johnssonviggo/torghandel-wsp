@@ -27,6 +27,8 @@ class UsersController < ApplicationController
 
     if user && BCrypt::Password.new(user['password']) == data["password"]
         session[:user_id] = user['id']
+        session[:admin_id] = nil
+        
         content_type :json
         { message: "Login successful", user: { id: user['id'], username: user['username'] } }.to_json
     else

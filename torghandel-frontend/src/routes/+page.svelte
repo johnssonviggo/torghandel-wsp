@@ -48,7 +48,7 @@
 
 <main class=" flex flex-col items-center">
   {#each message as item}
-  <div class=" flex flex-col mt-15 p-5 bg-[#EEEEEE] w-full max-w-[90vw] rounded-lg shadow-md items-center
+  <div class=" flex flex-col mt-15 p-5 bg-[var(--clr-card)] w-full max-w-[90vw] rounded-lg shadow-md items-center
   sm:flex-row sm:max-w-5xl">
     
     
@@ -59,29 +59,29 @@
 
     <div class="flex flex-col ml-5 mt-4
     sm:mt-0">
-      <div class="font-semibold text-[#393E46] text-2xl mb-3">
+      <div class="font-semibold text-[var(--gr-txt)] text-2xl mb-3">
         {item.name}
       </div>
 
-      <div class="text-md text-[#393E46] mb-2">
+      <div class="text-md text-[var(--gr-txt)] mb-2">
         {item.description}
       </div>
 
-      <div class="text-lg text-[#393E46] font-bold">
+      <div class="text-lg text[var(--gr-txt)] font-bold">
         {item.cost} Kronor
       </div>
 
       <div class="mt-4 text-lg space-x-4 font-semibold">
         <button 
           on:click={() => deleteListing(item.id)} 
-          class="p-3 bg-[#00ADB5] rounded-lg text-white transition hover:bg-[#007A80]"
+          class="p-3 bg-[var(--blu-btn)] rounded-lg text-white transition hover:bg-[#007A80]"
         >
           Ta bort
         </button>
 
         <button
           on:click={() => editListing(item)}
-          class="bg-[#CCCCCC] text-[#393E46] p-3 rounded-lg transition hover:bg-[#AAAAAA]"
+          class="bg-[#CCCCCC] text-[var(--gr-txt)] p-3 rounded-lg transition hover:bg-[#AAAAAA]"
         >
           Ändra
         </button> 

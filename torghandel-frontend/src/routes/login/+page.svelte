@@ -6,11 +6,23 @@
     let username = "";
     let password = "";
     let message = "";
+    let isAdmin = false;
 
     async function login(event) {
-      console.log("password", password)
       event.preventDefault(); // Prevents form from reloading the page
-        const response = await fetch("http://localhost:9292/api/login", {
+
+      console.log("Admin login:", isAdmin);
+      console.log("Sending request with username:", username);
+
+      const body = isAdmin
+      ? { admin_name, admin_password}
+      : { username, password }; // Ensure admin login sends the right field
+
+      const endpoint = isAdmin
+      ? "http://localhost:9292/api/admin/login"
+      : "http://localhost:9292/api/login";        
+      
+      const response = await fetch(endpoint, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -23,26 +35,31 @@
 
         console.log(data);
 
-        if (response.ok) {
-            localStorage.setItem("user", JSON.stringify(data.user));
-            message = "Login successful!";
-            await goto("/")
-          } else {
-            message = data.message;
-            alert("doo doo, no access")
-        }
+    if (response.ok) {
+      if (isAdmin) {
+        localStorage.setItem("admin", JSON.stringify(data.admin));
+      } else {
+        localStorage.setItem("user", JSON.stringify(data.user));
+      }
+      
+      message = "Login successful!";
+      await goto("/");
+    } else {
+      message = data.message;
+      alert("doo doo, no access");
     }
+  }
 </script>
 
 <form on:submit={login}
-  class=" bg-[#EEEEEE] ml-5 mt-10 me-5 rounded-lg shadow-md text-lg max-w-3xl p-6
+  class=" bg-[var(--clr-card)] ml-5 mt-10 me-5 rounded-lg shadow-md text-lg max-w-3xl p-6
   sm:me-0 sm:mt-20"
 >
-  <div class=" flex flex-col text-[#393E46] font-medium">
+  <div class=" flex flex-col text-[var(--gr-txt)] font-medium">
     <label class="">
       Namn:
       <input
-        class=" border border-[#CCCCCC] rounded-lg p-2 w-full mt-1 focus:outline-none focus:ring-2 focus:ring-[#222831]"
+        class=" border border-[var(--clr-border)] rounded-lg p-2 w-full mt-1 focus:outline-none focus:ring-2 focus:ring-[#222831]"
         bind:value={username}
         placeholder="Username"
         />
@@ -52,9 +69,14 @@
       Lösenord:
       <input type="password"
         bind:value={password}
-        class=" border border-[#CCCCCC] rounded-lg p-2 w-full mt-1 focus:outline-none focus:ring-2 focus:ring-[#222831]"
+        class=" border border-[var(--clr-border)] rounded-lg p-2 w-full mt-1 focus:outline-none focus:ring-2 focus:ring-[#222831]"
         placeholder="Password"
       />
+    </label>
+
+    <label class="mt-3 flex items-center">
+      <input type="checkbox" bind:checked={isAdmin} class="mr-2" />
+      Logga in som admin
     </label>
 
     <div class=" flex space-x-4 mt-4">

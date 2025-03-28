@@ -43,14 +43,14 @@
 </script>
 
 <form on:submit={handleRegister}
-  class=" bg-[#EEEEEE] ml-5 mt-10 me-5 rounded-lg shadow-md text-lg max-w-3xl p-6
+  class=" bg-[var(--clr-card)] ml-5 mt-10 me-5 rounded-lg shadow-md text-lg max-w-3xl p-6
   sm:me-0 sm:mt-20"
 >
-  <div class=" flex flex-col text-[#393E46] font-medium">
+  <div class=" flex flex-col text-[var(--gr-txt)] font-medium">
     <label class="">
       Namn:
       <input bind:value={username}
-        class=" border border-[#CCCCCC] rounded-lg p-2 w-full mt-1 focus:outline-none focus:ring-2 focus:ring-[#222831]"
+        class=" border border-[var(--clr-border)] rounded-lg p-2 w-full mt-1 focus:outline-none focus:ring-2 focus:ring-[#222831]"
         placeholder="Username"
         />
     </label>
@@ -58,7 +58,7 @@
     <label>
       Lösenord:
       <input type="password" bind:value={password}
-        class=" border border-[#CCCCCC] rounded-lg p-2 w-full mt-1 focus:outline-none focus:ring-2 focus:ring-[#222831]"
+        class=" border border-[var(--clr-border)] rounded-lg p-2 w-full mt-1 focus:outline-none focus:ring-2 focus:ring-[#222831]"
         placeholder="Password"
       />
     </label>
@@ -73,7 +73,7 @@
     </div>
     <div>
         <button  on:click={handleCancel}
-          class=" bg-[#CCCCCC] text-[#393E46] p-3 rounded-lg font-semibold transition hover:bg-[#AAAAAA]"
+          class=" bg-[var(--clr-border)] text-[var(--gr-txt)] p-3 rounded-lg font-semibold transition hover:bg-[#AAAAAA]"
         >
           Avbryt</button
         >

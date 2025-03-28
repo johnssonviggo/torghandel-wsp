@@ -74,42 +74,42 @@ sm:flex-row">
   <form 
     on:submit={handleSubmit} 
     enctype="multipart/form-data" 
-    class="grid items-center bg-[#EEEEEE] mx-5 mt-10 rounded-lg shadow-md text-lg max-w-xl p-6
+    class="grid items-center bg-[var(--clr-card)] mx-5 mt-10 rounded-lg shadow-md text-lg max-w-xl p-6
     sm:me-0 sm:mt-20"
   >
     <div class="flex flex-col space-y-4">
 
-      <label class="text-[#393E46] font-medium">
+      <label class="text-[var(--gr-txt)] font-medium">
         Namn:
-        <input class="border border-[#CCCCCC] rounded-lg p-2 w-full mt-1 focus:outline-none focus:ring-2 focus:ring-[#222831]" 
+        <input class="border border-[var(--clr-border)] rounded-lg p-2 w-full mt-1 focus:outline-none focus:ring-2 focus:ring-[#222831]" 
           bind:value={name} required />
       </label>
 
-      <label class="text-[#393E46] font-medium">
+      <label class="text-[var(--gr-txt)] font-medium">
         Beskrivning:
-        <input class="border border-[#CCCCCC] rounded-lg p-2 w-full mt-1 focus:outline-none focus:ring-2 focus:ring-[#222831]" 
+        <input class="border border-[var(--clr-border)] rounded-lg p-2 w-full mt-1 focus:outline-none focus:ring-2 focus:ring-[#222831]" 
           bind:value={description} required />
       </label>
 
-      <label class="text-[#393E46] font-medium">
+      <label class="text-[var(--gr-txt)] font-medium">
         Kostnad:
-        <input type="number" class="border border-[#CCCCCC] rounded-lg p-2 w-full mt-1 focus:outline-none focus:ring-2 focus:ring-[#222831]" 
+        <input type="number" class="border border-[var(--clr-border)] rounded-lg p-2 w-full mt-1 focus:outline-none focus:ring-2 focus:ring-[#222831]" 
           bind:value={cost} required />
       </label>
 
-      <label class="text-[#393E46] font-medium">
+      <label class="text-[var(--gr-txt)] font-medium">
         Ladda upp bild:
         <input type="file" on:change={handleFileChange}  accept="image/"
-          class="border border-[#CCCCCC] rounded-lg p-2 w-full mt-1 focus:outline-none focus:ring-2 focus:ring-[#222831]" />
+          class="border border-[var(--clr-border)] rounded-lg p-2 w-full mt-1 focus:outline-none focus:ring-2 focus:ring-[#222831]" />
       </label>
 
       <div class="flex space-x-4 mt-4">
-        <button type="submit" class="bg-[#00ADB5] text-white p-3 rounded-lg font-semibold transition hover:bg-[#007A80]">
+        <button type="submit" class="bg-[var(--blu-btn)] text-white p-3 rounded-lg font-semibold transition hover:bg-[#007A80]">
           Lägg till
         </button>
 
         <button type="button" on:click={handleCancel} 
-          class="bg-[#CCCCCC] text-[#393E46] p-3 rounded-lg font-semibold transition hover:bg-[#AAAAAA]">
+          class="bg-[var(--clr-border)] text-[var(--gr-txt)] p-3 rounded-lg font-semibold transition hover:bg-[#AAAAAA]">
           Avbryt
         </button>
       </div>
@@ -117,7 +117,7 @@ sm:flex-row">
     </div>
 
   </form>
-  <div class="grid bg-[#EEEEEE] mx-5 my-5 rounded-lg shadow-md text-lg max-w-3xl p-6 items-center
+  <div class="grid bg-[var(--clr-card)] mx-5 my-5 rounded-lg shadow-md text-lg max-w-3xl p-6 items-center text-[var(--gr-txt)]
   sm:mx-20 sm:mt-20 sm:mb-0">
     {#if showImage}
       <img src={imgSrc} alt="Preview" class="max-w-full rounded-lg shadow-md

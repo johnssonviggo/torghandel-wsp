@@ -20,6 +20,7 @@ class Seeder
       db.execute('DROP TABLE IF EXISTS listings')
 
       db.execute('DROP TABLE IF EXISTS users')
+      db.execute('DROP TABLE IF EXISTS admin')
     end
 
     def self.create_tables
@@ -34,18 +35,25 @@ class Seeder
               id INTEGER PRIMARY KEY AUTOINCREMENT,
               username TEXT NOT NULL,
               password TEXT NOT NULL)')
+
+      db.execute('CREATE TABLE admin (
+                  id INTEGER PRIMARY KEY AUTOINCREMENT,
+                  admin_name TEXT NOT NULL,
+                  admin_password TEXT NOT NULL)')
     end
 
     def self.populate_tables
       password_hashed = BCrypt::Password.create("d1npiZZ4!")
+      admin_password_hashed = BCrypt::Password.create("Admin!1")
       db.execute('INSERT INTO listings (name, description, cost, image) VALUES ("GAMMAL SAAB", "Rostig men fungerar fantastiskt", "10000", "garbage_truck.jpg")')
       db.execute('INSERT INTO listings (name, description, cost, image) VALUES ("BANANSKAL", "Gult skal", "100000", "")')
 
       db.execute('INSERT INTO users (username, password) VALUES (?,?)', ["Viggo", password_hashed])
+      db.execute('INSERT INTO admin (admin_name, admin_password) VALUES (?,?)', ["Admin", admin_password_hashed])
     end
 
     private
-    
+
     def self.db
       return @db if @db
 
