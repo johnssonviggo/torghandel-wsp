@@ -23,12 +23,24 @@ class UsersController < ApplicationController
     username = data["username"]
     password = data["password"]
 
-    user = User.find_by_username(data["username"])
+    user = User.find_by("username", data["username"])
 
-    if user && BCrypt::Password.new(user['password']) == data["password"]
+    puts "User from DB: #{user.inspect}"
+    puts "Password from frontend: #{password}"
+    puts "Hashed password: #{user}"
+
+    hashed_password = user['password'].to_s
+    bcrypt_db_pass = BCrypt::Password.new(hashed_password)
+
+    puts "User id: #{user['id'].inspect}"
+    puts "Session user_id before; #{session[:user_id]}"
+
+    if user && bcrypt_db_pass == password
         session[:user_id] = user['id']
-        session[:admin_id] = nil
-        
+
+        puts "Session user_id after; #{session[:user_id]}"
+        # session[:admin_id] = nil
+
         content_type :json
         { message: "Login successful", user: { id: user['id'], username: user['username'] } }.to_json
     else
@@ -41,7 +53,7 @@ end
     username = data["username"]
     password = data["password"]
 
-    existing_user = User.find_by_username(username)
+    existing_user = User.find_by("username", data["username"])
     if existing_user
         halt 400, { message: "Username already exists" }.to_json
     end

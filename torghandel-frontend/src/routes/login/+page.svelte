@@ -2,6 +2,8 @@
   //@ts-nocheck
   import { onMount } from "svelte";
   import { goto } from "$app/navigation";
+  import { user } from "../../stores/user.js";
+
 
     let username = "";
     let password = "";
@@ -15,7 +17,7 @@
       console.log("Sending request with username:", username);
 
       const body = isAdmin
-      ? { admin_name, admin_password}
+      ? { admin_name: username, admin_password: password }
       : { username, password }; // Ensure admin login sends the right field
 
       const endpoint = isAdmin
@@ -26,9 +28,9 @@
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
-                "Accept": "application/json",
-    },
-            body: JSON.stringify({ username, password })
+                "Accept": "application/json"},      
+            credentials: "include",
+            body: JSON.stringify(body)
         });
 
         const data = await response.json();
@@ -39,7 +41,9 @@
       if (isAdmin) {
         localStorage.setItem("admin", JSON.stringify(data.admin));
       } else {
-        localStorage.setItem("user", JSON.stringify(data.user));
+        user.set(data.user);
+        console.log("User set to:", data.user);
+        console.log("banan");
       }
       
       message = "Login successful!";
@@ -49,6 +53,7 @@
       alert("doo doo, no access");
     }
   }
+
 </script>
 
 <form on:submit={login}

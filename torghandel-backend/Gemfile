@@ -8,6 +8,7 @@ gem 'sqlite3'
 gem 'webrick'
 gem 'bcrypt'
 gem 'yard'
+gem 'debug'
 
 gem 'jason'
 gem 'sinatra-cross_origin'

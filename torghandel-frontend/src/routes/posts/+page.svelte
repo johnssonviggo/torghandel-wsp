@@ -30,7 +30,8 @@
     try {
       const response = await fetch("http://localhost:9292/api/listings", {
         method: "POST",
-        body: formData, // No need for headers, fetch sets them automatically for FormData
+        body: formData,
+        credentials: "include"
       });
 
       const data = await response.json();

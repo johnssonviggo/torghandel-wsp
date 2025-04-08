@@ -5,6 +5,10 @@ require 'json'
 require_relative '../models/database'
 
 class ApplicationController < Sinatra::Base
+  use Rack::Session::Cookie, key: "rack.session",
+                               path: "/",
+                               secret: ENV["SESSION_SECRET"]
+
   configure do
     enable :cross_origin
     set :allow_origin, "*"
@@ -13,9 +17,10 @@ class ApplicationController < Sinatra::Base
   end
 
   before do
-    response.headers['Access-Control-Allow-Origin'] = '*'
+    response.headers['Access-Control-Allow-Origin'] = 'http://localhost:5173'
     response.headers["Access-Control-Allow-Methods"] = "GET, POST, OPTIONS"
     response.headers["Access-Control-Allow-Headers"] = "Content-Type, Authorization"
+    response.headers['Access-Control-Allow-Credentials'] = 'true'
   end
 
   set :allow_origin, "*"
@@ -23,7 +28,7 @@ class ApplicationController < Sinatra::Base
   set :allow_headers, "Content-Type, Authorization"
 
   options "*" do
-      response.headers["Access-Control-Allow-Origin"] = "*"
+      response.headers["Access-Control-Allow-Origin"] = "http://localhost:5173"
       response.headers["Access-Control-Allow-Methods"] = "GET, POST, OPTIONS"
       response.headers["Access-Control-Allow-Headers"] = "Content-Type, Authorization"
       halt 200

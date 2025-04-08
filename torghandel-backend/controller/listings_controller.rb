@@ -24,10 +24,14 @@ class ListingsController < ApplicationController
   end
 
   post '/api/listings' do
+
     name = params[:name]
     description = params[:description]
     cost = params[:cost]
     image_filename = params[:image] ? params[:image][:filename] : ""
+    owner_id = session[:user_id]
+    p owner_id
+    p "session[:user_id] is #{session[:user_id]}"
 
     if params[:image] && params[:image][:tempfile]
         FileUtils.mkdir_p("public/img")
@@ -35,29 +39,25 @@ class ListingsController < ApplicationController
         File.open(path, "wb") { |file| file.write(params[:image][:tempfile].read) }
     end
 
-    Listing.create(name, description, cost, image_filename)
+    Listing.create(name, description, cost, image_filename, owner_id)
     content_type :json
     { message: "Listing created", image_url: "http://localhost:9292/img/#{image_filename}" }.to_json
   end
 
   post '/api/listings/:id/delete' do
-    halt 401, { message: "Unauthorized" }.to_json unless session[:admin_id]  # Only admins can delete
-
-    listing = Listing.find(params[:id])
-    halt 404, { message: "Listing not found" }.to_json unless listing
-
-    # Listing.delete(params[:id])
-    # content_type :json
-    # { message: "Listing deleted" }.to_json
-
+    params.inspect
     Listing.delete(params[:id])
+    @listings = Listing.all
+
     content_type :json
     { message: "Listing deleted by admin" }.to_json
   end
 
   post '/api/listings/:id/update' do
-    halt 401, { message: "Unauthorized" }.to_json unless session[:admin_id]
-    
+    # halt 401, { message: "Unauthorized" }.to_json unless session[:admin_id]
+
+    p params.inspect
+
     name = params[:name]
     description = params[:description]
     cost = params[:cost]

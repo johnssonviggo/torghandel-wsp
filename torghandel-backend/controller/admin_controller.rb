@@ -9,7 +9,7 @@ class AdminController < ApplicationController
 
     p "Received data: #{data}"
 
-    admin = Admin.find_by_username(data["admin_name"])
+    admin = Admin.find_by("admin_name", data["admin_name"])
 
 
     if admin
@@ -24,7 +24,7 @@ class AdminController < ApplicationController
       session[:admin_id] = admin["id"]
       puts "Admin ID set in session: #{session[:admin_id]}" # Debugging output
       content_type :json
-      { message: "Admin login successful", admin: { id: admin["id"], admin_name: admin["admin_name"] } }.to_json
+      { message: "Admin login successful", admin: { id: admin["id"], username: admin["admin_name"] } }.to_json
     else
       halt 401, { message: "Invalid admin credentials" }.to_json
     end

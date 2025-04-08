@@ -1,9 +1,11 @@
 <script>
   // @ts-nocheck
+  $: console.log("Current user is:", $admin);
+  $: console.log("Current user is:", $user);
 
   import Navbar from "../components/Navbar.svelte";
   import { onMount } from "svelte";
-
+  import { user, admin } from "../stores/user.js";
   let message = "Loading...";
 
   let name = "";
@@ -23,14 +25,16 @@
 
   // Delete function
   const deleteListing = async (id) => {
+    console.log("ta bort denna listing");
     try {
       const res = await fetch(`http://localhost:9292/api/listings/${id}/delete`, {
         method: 'POST',  // You might use DELETE here too depending on your backend
       });
       const data = await res.json();
-      if (data.message === "Listing deleted") {
+      if (data.message.includes("Listing deleted"))  {
         // Filter out the deleted item from the `message` array
-        message = message.filter(item => item.id !== id);
+        message = [...message.filter(item => item.id !== id)];
+
       } else {
         console.error("Failed to delete listing");
       }
@@ -42,6 +46,10 @@
   const editListing = (item) => {
   window.location.href = `/edit/${item.id}`;
 };
+
+function logout() {
+  user.set(null);
+}
 
   console.log("Hello world!");
 </script>
@@ -70,7 +78,7 @@
       <div class="text-lg text[var(--gr-txt)] font-bold">
         {item.cost} Kronor
       </div>
-
+    {#if $admin || $user && $user.id === item.owner_id}
       <div class="mt-4 text-lg space-x-4 font-semibold">
         <button 
           on:click={() => deleteListing(item.id)} 
@@ -86,8 +94,8 @@
           Ändra
         </button> 
       </div>
+    {/if}
     </div>
-
   </div>
   {/each}
 </main>
