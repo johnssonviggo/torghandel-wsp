@@ -29,12 +29,11 @@ class Seeder
 
     db.execute('CREATE TABLE listings (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
-            owner_id INTEGER NOT NULL,
+            owner_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
             name TEXT NOT NULL,
             description TEXT,
             cost NUMBER NOT NULL,
-            image FILE NOT NULL,
-            FOREIGN KEY(owner_id) REFERENCES users(id) ON DELETE CASCADE
+            image FILE NOT NULL
             )')
 
     db.execute('CREATE TABLE admin (

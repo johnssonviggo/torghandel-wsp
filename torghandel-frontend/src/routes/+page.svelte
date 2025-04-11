@@ -25,7 +25,6 @@
 
   // Delete function
   const deleteListing = async (id) => {
-    console.log("ta bort denna listing");
     try {
       const res = await fetch(`http://localhost:9292/api/listings/${id}/delete`, {
         method: 'POST',  // You might use DELETE here too depending on your backend

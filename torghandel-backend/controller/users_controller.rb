@@ -1,7 +1,13 @@
 require_relative 'application_controller'
 require_relative '../models/users'
 
+
 class UsersController < ApplicationController
+  FAILED_ATTEMPTS = {}
+  LOCKOUT_THRESHOLD = 3
+  LOCKOUT_TIME = 1 * 60
+
+
   get '/api/users' do
     users = User.all
     content_type :json
@@ -23,6 +29,14 @@ class UsersController < ApplicationController
     username = data["username"]
     password = data["password"]
 
+    attempts = FAILED_ATTEMPTS[username] ||= {count: 0, last_attempt: Time.now }
+
+    puts attempts
+
+    if attempts[:locked_until] && Time.now < attempts[:locked_until]
+      halt 429, { message: "Too many failed attempts. Try again later." }.to_json
+    end
+
     user = User.find_by("username", data["username"])
 
     puts "User from DB: #{user.inspect}"
@@ -38,13 +52,21 @@ class UsersController < ApplicationController
     if user && bcrypt_db_pass == password
         session[:user_id] = user['id']
 
+        FAILED_ATTEMPTS.delete(username)
+
         puts "Session user_id after; #{session[:user_id]}"
-        # session[:admin_id] = nil
 
         content_type :json
         { message: "Login successful", user: { id: user['id'], username: user['username'] } }.to_json
     else
-        halt 401, { message: "Invalid credentials" }.to_json
+      attempts[:count] += 1
+      attempts[:last_attempt] = Time.now
+
+      if attempts[:count] >= LOCKOUT_THRESHOLD
+        attempts[:locked_until] = Time.now + LOCKOUT_TIME
+    end
+
+      halt 401, { message: "Invalid credentials" }.to_json
     end
 end
 
@@ -72,4 +94,19 @@ end
       content_type :json
       { message: "Logged out" }.to_json
   end
+
+  post '/api/users/:id/delete' do
+
+    user = User.find_by("id", params[:id])
+
+    if user
+      User.delete(params[:id])
+
+      content_type :json
+      { message: "User and their listings deleted successfully" }.to_json
+    else
+      halt 404, { message: "User not found" }.to_json
+    end
+  end
+
 end
