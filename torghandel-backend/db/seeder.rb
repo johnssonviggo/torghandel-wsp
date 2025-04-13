@@ -12,13 +12,13 @@ class Seeder
   end
 
   def self.drop_tables
+    db.execute('DROP TABLE IF EXISTS listing_tags')
     db.execute('DROP TABLE IF EXISTS listings')
+    db.execute('DROP TABLE IF EXISTS tags')
 
     db.execute('DROP TABLE IF EXISTS users')
     db.execute('DROP TABLE IF EXISTS admin')
 
-    db.execute('DROP TABLE IF EXISTS tags')
-    db.execute('DROP TABLE IF EXISTS listing_tags')
   end
 
   def self.create_tables
@@ -37,26 +37,27 @@ class Seeder
             )')
 
     db.execute('CREATE TABLE admin (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
-      admin_name TEXT NOT NULL,
-      admin_password TEXT NOT NULL)')
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            admin_name TEXT NOT NULL,
+            admin_password TEXT NOT NULL)')
 
-    # db.execute('CREATE TABLE tags (
-    #   id INTEGER PRIMARY KEY AUTOINCREMENT,
-    #   name TEXT NOT NULL UNIQUE)')
+    db.execute('CREATE TABLE tags (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            name TEXT NOT NULL UNIQUE)')
 
-    #   db.execute('CREATE TABLE listing_tags(
-    #     listing_id INTEGER NOT NULL,
-    #     tag_id INTEGER NOT NULL,
-    #     FOREIGN KEY (listing_id) REFERENCES listings(id),
-    #     FOREIGN KEY (tag_id) REFERENCES tags(id),
-    #     PRIMARY KEY (listing_id, tag_id)),
-    #     tag_name TEXT NOT NULL')
+    db.execute('CREATE TABLE listing_tags(
+            listing_id INTEGER NOT NULL,
+            tag_id INTEGER NOT NULL,
+            FOREIGN KEY (listing_id) REFERENCES listings(id),
+            FOREIGN KEY (tag_id) REFERENCES tags(id),
+            PRIMARY KEY (listing_id, tag_id)
+          )')
   end
 
   def self.populate_tables
     password_hashed = BCrypt::Password.create("d1npiZZ4!")
     admin_password_hashed = BCrypt::Password.create("Admin!1")
+
     db.execute('INSERT INTO users (username, password) VALUES (?,?)', ["Viggo", password_hashed])
     @owner_id = db.last_insert_row_id
 
@@ -64,27 +65,34 @@ class Seeder
     db.execute('INSERT INTO listings (name, description, cost, image, owner_id) VALUES (?, ?, ?, ?, ?)',
     ["GAMMAL SAAB", "Rostig men fungerar fantastiskt", "10000", "garbage_truck.jpg", @owner_id])
 
+    listing_id = db.last_insert_row_id
+
+
     db.execute('INSERT INTO listings (name, description, cost, image, owner_id) VALUES (?, ?, ?, ?, ?)',
     ["BANANSKAL", "Gult skal", "100000", "", @owner_id])
 
-    db.execute('INSERT INTO admin (admin_name, admin_password) VALUES (?,?)', ["Admin", admin_password_hashed])
+    listing_id = db.last_insert_row_id
 
 
-      # db.execute('INSERT INTO listing')
-      # tags = ["Car", "Rusty", "Yellow", "Luxury"]
-      # tags.each { |tag| db.execute('INSERT OR IGNORE INTO tags (name) VALUES (?)', [tag]) }
+    tags = ["bil", "mat", "skräp"]
 
-      # listing_tags = [
-      #   [1, "Car"],    # GAMMAL SAAB -> Car
-      #   [1, "Rusty"],  # GAMMAL SAAB -> Rusty
-      #   [2, "Yellow"], # BANANSKAL -> Yellow
-      #   [2, "Luxury"]  # BANANSKAL -> Luxury
-      # ]
+    tags.each do |tag_name|
+      #Check if tag exist
+      tag = db.get_first_row('SELECT id FROM tags WHERE name=?', [tag_name])
 
-      # listing_tags.each do |listing_id, tag_name|
-      #   tag_id = db.execute('SELECT id FROM tags WHERE name = ?', [tag_name]).first&.dig("id")
-      #   db.execute('INSERT INTO listing_tags (listing_id, tag_id, tag_name) VALUES (?, ?, ?)', [listing_id, tag_id, tag_name]) if tag_id
-      # end
+      if tag
+        tag_id = tag["id"]
+      else
+        db.execute('INSERT INTO tags (name) VALUES (?)', [tag_name])
+        tag_id = db.last_insert_row_id
+      end
+
+      #Insert into listings_tag
+      db.execute('INSERT INTO listing_tags (listing_id, tag_id) VALUES (?,?)', [listing_id, tag_id])
+    end
+
+    db.execute('INSERT OR IGNORE INTO admin (admin_name, admin_password) VALUES (?,?)', ["Admin", admin_password_hashed])
+
   end
 
   private

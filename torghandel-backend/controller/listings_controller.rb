@@ -30,6 +30,8 @@ class ListingsController < ApplicationController
     cost = params[:cost]
     image_filename = params[:image] ? params[:image][:filename] : ""
     owner_id = session[:user_id]
+    tags = params["tags"]
+
     p owner_id
     p "session[:user_id] is #{session[:user_id]}"
 
