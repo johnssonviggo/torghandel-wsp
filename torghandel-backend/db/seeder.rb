@@ -62,37 +62,51 @@ class Seeder
     @owner_id = db.last_insert_row_id
 
 
-    db.execute('INSERT INTO listings (name, description, cost, image, owner_id) VALUES (?, ?, ?, ?, ?)',
+    # db.execute('INSERT INTO listings (name, description, cost, image, owner_id) VALUES (?, ?, ?, ?, ?)',
+    # ["GAMMAL SAAB", "Rostig men fungerar fantastiskt", "10000", "garbage_truck.jpg", @owner_id])
+
+    # listing_id = db.last_insert_row_id
+
+
+    # db.execute('INSERT INTO listings (name, description, cost, image, owner_id) VALUES (?, ?, ?, ?, ?)',
+    # ["BANANSKAL", "Gult skal", "100000", "", @owner_id])
+
+    # add first listing
+    db.execute('INSERT INTO listings (name, description, cost, image, owner_id) VALUES (?,?,?,?,?)',
     ["GAMMAL SAAB", "Rostig men fungerar fantastiskt", "10000", "garbage_truck.jpg", @owner_id])
 
     listing_id = db.last_insert_row_id
+    add_tags_to_listing(listing_id, ["bil", "skräp"])
 
-
-    db.execute('INSERT INTO listings (name, description, cost, image, owner_id) VALUES (?, ?, ?, ?, ?)',
+    # add second listing
+    db.execute('INSERT INTO listings (name, description, cost, image, owner_id) VALUES (?,?,?,?,?)',
     ["BANANSKAL", "Gult skal", "100000", "", @owner_id])
 
     listing_id = db.last_insert_row_id
-
-
-    tags = ["bil", "mat", "skräp"]
-
-    tags.each do |tag_name|
-      #Check if tag exist
-      tag = db.get_first_row('SELECT id FROM tags WHERE name=?', [tag_name])
-
-      if tag
-        tag_id = tag["id"]
-      else
-        db.execute('INSERT INTO tags (name) VALUES (?)', [tag_name])
-        tag_id = db.last_insert_row_id
-      end
-
-      #Insert into listings_tag
-      db.execute('INSERT INTO listing_tags (listing_id, tag_id) VALUES (?,?)', [listing_id, tag_id])
-    end
+    add_tags_to_listing(listing_id, ["mat", "skräp"])
 
     db.execute('INSERT OR IGNORE INTO admin (admin_name, admin_password) VALUES (?,?)', ["Admin", admin_password_hashed])
 
+  end
+
+  def self.add_tags_to_listing(listing_id, tag_names)
+    tag_names.each do |tag_name|
+
+      #Check if tag exist
+      tag = db.get_first_row('SELECT id FROM tags WHERE name=?', [tag_name])
+
+      #if check does not exist
+      tag_id =
+      if tag
+        tag["id"]
+      else
+        db.execute('INSERT INTO tags (name) VALUES (?)', [tag_name])
+        db.last_insert_row_id
+      end
+
+      #Link tag to listing
+      db.execute('INSERT INTO listing_tags (listing_id, tag_id) VALUES (?,?)', [listing_id, tag_id])
+    end
   end
 
   private

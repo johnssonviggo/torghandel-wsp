@@ -62,6 +62,7 @@ class Listing < Base
 
     Database.connection.execute('INSERT OR IGNORE INTO listing_tags (listing_id, tag_id) VALUES (?, ?)', [listing_id, tag_id])
   end
+    return listing_id
   end
 
   def self.delete(id)

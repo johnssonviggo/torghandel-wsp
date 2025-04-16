@@ -30,7 +30,9 @@ class ListingsController < ApplicationController
     cost = params[:cost]
     image_filename = params[:image] ? params[:image][:filename] : ""
     owner_id = session[:user_id]
-    tags = params["tags"]
+    tag_string = params["tags"] || "" #example skräp, bil
+    tags = tag_string.split(',').map(&:strip).reject(&:empty?)
+
 
     p owner_id
     p "session[:user_id] is #{session[:user_id]}"
@@ -41,7 +43,9 @@ class ListingsController < ApplicationController
         File.open(path, "wb") { |file| file.write(params[:image][:tempfile].read) }
     end
 
-    Listing.create(name, description, cost, image_filename, owner_id)
+    listing_id = Listing.create(name, description, cost, image_filename, owner_id, tags)
+
+    
     content_type :json
     { message: "Listing created", image_url: "http://localhost:9292/img/#{image_filename}" }.to_json
   end
