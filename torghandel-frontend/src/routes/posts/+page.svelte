@@ -12,6 +12,8 @@
   let imageFile = null; // Store selected image file
   let showImage= false;
   let imgSrc = "";
+  let availableTags = ["bil", "skräp", "mat", "möbler", "random"];
+  let selectedTags = [];
 
   /** @param {SubmitEvent} event */
 
@@ -26,6 +28,8 @@
     if (imageFile) {
       formData.append("image", imageFile);
     }
+
+    formData.append("tags", selectedTags.join(","));
 
     try {
       const response = await fetch("http://localhost:9292/api/listings", {
@@ -69,6 +73,14 @@ name = "";
   imgSrc = "";
   showImage = false
 }
+
+function toggleTag(tag) {
+    if (selectedTags.includes(tag)) {
+      selectedTags = selectedTags.filter(t => t !== tag);
+    } else {
+      selectedTags = [...selectedTags, tag];
+    }
+  }
 </script>
 <div class=" flex flex-col
 sm:flex-row">
@@ -127,5 +139,22 @@ sm:flex-row">
       <span>Image Preview</span>
     {/if}
   </div>
+  <label class="ms-5 text-[var(--gr-txt)] font-medium">
+    <div class="mx-5 my-5 max-w-3xl rounded-lg bg-[var(--clr-card)] p-6 text-lg text-[var(--gr-txt)] shadow-md flex flex-wrap items-center 
+                sm:mx-20 sm:mt-20 sm:mb-0">
+      {#each availableTags as tag}
+      <button
+      type="button"
+      class={`px-3 py-2 rounded-md font-medium
+              ${selectedTags.includes(tag)
+                ? 'bg-[#00ADB5] text-white'
+                : 'text-[var(--gr-txt)] bg-[#ccc] hover:bg-[var(--blu-btn)]'}`}
+      on:click={() => toggleTag(tag)}
+    >
+      {tag}
+    </button>
+      {/each}
+    </div>
+  </label>
 </div>
 
