@@ -12,7 +12,7 @@
   let imageFile = null; // Store selected image file
   let showImage= false;
   let imgSrc = "";
-  let availableTags = ["bil", "skräp", "mat", "möbler", "random"];
+  let availableTags = ["bil", "skräp", "mat", "möbler", "random", "elektronik", "kläder"];
   let selectedTags = [];
 
   /** @param {SubmitEvent} event */
@@ -144,15 +144,16 @@ sm:flex-row">
                 sm:mx-20 sm:mt-20 sm:mb-0">
       {#each availableTags as tag}
       <button
-      type="button"
-      class={`px-3 py-2 rounded-md font-medium
-              ${selectedTags.includes(tag)
-                ? 'bg-[#00ADB5] text-white'
-                : 'text-[var(--gr-txt)] bg-[#ccc] hover:bg-[var(--blu-btn)]'}`}
-      on:click={() => toggleTag(tag)}
-    >
-      {tag}
-    </button>
+  type="button"
+  class={` inline-flex m-2 px-3 py-2 rounded-md font-medium transition-colors
+          ${selectedTags.includes(tag)
+            ? 'bg-[#00ADB5] text-white'
+            : 'text-[var(--gr-txt)] hover:bg-[#ccc]'
+}`}
+  on:click={() => toggleTag(tag)}
+>
+  {tag}
+</button>
       {/each}
     </div>
   </label>

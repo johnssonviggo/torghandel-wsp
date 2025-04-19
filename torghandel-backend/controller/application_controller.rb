@@ -4,11 +4,26 @@ require 'json'
 
 require_relative '../models/database'
 
+##
+# Base application controller that sets up session management,
+# CORS (Cross-Origin Resource Sharing), and shared configuration for all routes.
+#
+# This controller is inherited by all other route controllers in the application.
 class ApplicationController < Sinatra::Base
+
+  # Enable cookie-based sessions.
+  #
+  # @example Session configuration
+  #   key: "rack.session"
+  #   path: "/"
+  #   secret: ENV["SESSION_SECRET"]
   use Rack::Session::Cookie, key: "rack.session",
                                path: "/",
                                secret: ENV["SESSION_SECRET"]
 
+
+
+  # Configuration block that enables CORS and defines allowed origins, methods, and headers.
   configure do
     enable :cross_origin
     set :allow_origin, "*"
@@ -16,6 +31,9 @@ class ApplicationController < Sinatra::Base
     set :allow_headers, "Content-Type, Authorization"
   end
 
+  # Before each request, set CORS response headers and enable foreign key support in SQLite.
+  #
+  # @note This is run before every request handled by the application.
   before do
     response.headers['Access-Control-Allow-Origin'] = 'http://localhost:5173'
     response.headers["Access-Control-Allow-Methods"] = "GET, POST, OPTIONS"
@@ -24,10 +42,15 @@ class ApplicationController < Sinatra::Base
     Database.connection.execute("PRAGMA foreign_keys = ON")
   end
 
+  # Redundant CORS settings for compatibility.
   set :allow_origin, "*"
   set :allow_methods, "GET, POST, OPTIONS"
   set :allow_headers, "Content-Type, Authorization"
 
+  # Handles preflight OPTIONS requests for CORS.
+  #
+  # @route OPTIONS /*
+  # @return [200 OK] Always returns a success for preflight checks
   options "*" do
       response.headers["Access-Control-Allow-Origin"] = "http://localhost:5173"
       response.headers["Access-Control-Allow-Methods"] = "GET, POST, OPTIONS"
@@ -35,5 +58,8 @@ class ApplicationController < Sinatra::Base
       halt 200
   end
 
+  # Initializes the database connection on load.
+  #
+  # @return [SQLite3::Database] The active database connection
   Database.connection
 end

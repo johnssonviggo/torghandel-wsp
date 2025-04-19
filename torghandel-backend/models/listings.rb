@@ -1,5 +1,12 @@
 require_relative 'database'
 
+
+##
+# The Listing class provides methods to interact with the `listings` table in the database.
+# It includes CRUD operations and manages associations between listings and tags.
+#
+# Inherits from `Base`, which provides shared ORM-like functionality (e.g. `.find_by`).
+#
 class Listing < Base
 
   # def initialize(hash)
@@ -10,11 +17,18 @@ class Listing < Base
   #   @image = hash["image"]
   # end
 
+  
+  # Returns the name of the table associated with this class.
+  #
+  # @return [String] the name of the table
   def self.table_name
     "listings"
   end
 
 
+  # Fetches all listings from the database, and appends associated tags and image URLs to each listing.
+  #
+  # @return [Array<Hash>] an array of listing hashes, each with additional `tags` and `image_url` keys.
   def self.all
     listings = Database.connection.execute("SELECT * FROM #{table_name()}")
     # convert_to_object_array
@@ -35,10 +49,26 @@ class Listing < Base
     return listings
   end
 
+
+  # Finds a single listing by ID.
+  #
+  # @param id [Integer] the ID of the listing
+  # @return [Hash, nil] the listing hash if found, or nil
   def self.find(id)
     Database.connection.execute("SELECT * FROM #{table_name()} WHERE id=?", [id]).first
   end
 
+
+  # Creates a new listing with optional tags.
+  #
+  # @param name [String] the listing name
+  # @param description [String] the listing description
+  # @param cost [Numeric] the cost of the listing
+  # @param image [String] image filename or URL
+  # @param owner_id [Integer] the ID of the listing's owner
+  # @param tags [Array<String>, String] tags as an array or comma-separated string
+  #
+  # @return [Integer] the ID of the newly created listing
   def self.create(name, description, cost, image, owner_id, tags = [])
     Database.connection.execute('INSERT INTO listings (name, description, cost, image, owner_id) VALUES (?, ?, ?, ?, ?)',
                                 [name, description, cost, image, owner_id])
@@ -65,10 +95,22 @@ class Listing < Base
     return listing_id
   end
 
+
+  # Deletes a listing by its ID.
+  #
+  # @param id [Integer] the ID of the listing to delete
   def self.delete(id)
     Database.connection.execute('DELETE FROM listings WHERE id=?', [id])
   end
 
+
+  # Updates an existing listing.
+  #
+  # @param id [Integer] the listing ID
+  # @param name [String] new name
+  # @param description [String] new description
+  # @param cost [Numeric] new cost
+  # @param image [String, nil] new image if provided
   def self.update(id, name, description, cost, image = nil)
     if image
         Database.connection.execute('UPDATE listings SET name=?, description=?, cost=?, image=? WHERE id=?',

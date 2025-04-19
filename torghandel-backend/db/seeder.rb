@@ -7,7 +7,7 @@ require 'bcrypt'
 #
 class Seeder
 
-  ##
+
   # Main method to initialize the full seed process:
   # Drops all existing tables, creates fresh ones, and populates them with starter data.
   #
@@ -21,7 +21,7 @@ class Seeder
     p "doit"
   end
 
-  ##
+
   # Drops all tables if they exist.
   # Tables: 'listing_tags', 'listings', 'tags', 'users', 'admin'
   #
@@ -37,7 +37,7 @@ class Seeder
 
   end
 
-  ##
+
   # Creates all the tables for the application:
   # 'users', 'listings', 'admin', 'tags', 'listing_tags'
   #
@@ -70,13 +70,13 @@ class Seeder
     db.execute('CREATE TABLE listing_tags(
             listing_id INTEGER NOT NULL,
             tag_id INTEGER NOT NULL,
-            FOREIGN KEY (listing_id) REFERENCES listings(id),
+            FOREIGN KEY (listing_id) REFERENCES listings(id) ON DELETE CASCADE,
             FOREIGN KEY (tag_id) REFERENCES tags(id),
             PRIMARY KEY (listing_id, tag_id)
           )')
   end
 
-  ##
+
   # Populates the database with example users, listings, and tags.
   # Also hashes and inserts user and admin credentials.
   #
@@ -107,7 +107,7 @@ class Seeder
 
   end
 
-  ##
+
   # Links tag names to a given listing by inserting records
   # into `tags` and `listing_tags` tables.
   #
@@ -137,7 +137,7 @@ class Seeder
 
   private
 
-  ##
+
   # Returns or initializes the SQLite database connection.
   # Ensures foreign key support is enabled and results are returned as hashes.
   #

@@ -1,19 +1,41 @@
 require_relative 'application_controller'
 require_relative '../models/users'
 
-
+##
+# Controller for user authentication and management.
+#
+# Handles login, registration, session management, and basic user-related operations.
 class UsersController < ApplicationController
+  # hash to store failed login attempts.
   FAILED_ATTEMPTS = {}
+
+  # Maximum allowed failed login attempts before lockout.
   LOCKOUT_THRESHOLD = 3
+
+  # Lockout time in seconds after exceeding threshold.
   LOCKOUT_TIME = 1 * 60
 
-
+  # @method GET
+  #
+  # GET /api/users
+  #
+  # Fetches all users from the database.
+  #
+  # @return [JSON] A list of all users.
+  #
   get '/api/users' do
     users = User.all
     content_type :json
     { users: users }.to_json
   end
 
+  # @method GET
+  #
+  # GET /api/protected
+  #
+  # Protected route that checks if the user is logged in via session.
+  #
+  # @return [JSON] Authorization confirmation or 401 if unauthorized.
   get '/api/protected' do
     if session[:user_id]
         content_type :json
@@ -23,6 +45,14 @@ class UsersController < ApplicationController
     end
   end
 
+  # @method POST
+  #
+  # Authenticates the user and creates a session.
+  # Implements basic brute-force protection with lockout on repeated failure.
+  #
+  # @param [String] username
+  # @param [String] password
+  # @return [JSON] Success message and user data or error/lockout messages.
   post '/api/login' do
     data = JSON.parse(request.body.read)
 
@@ -70,6 +100,13 @@ class UsersController < ApplicationController
     end
 end
 
+  # @method POST
+  #
+  # Registers a new user if the username is unique.
+  #
+  # @param [String] username
+  # @param [String] password
+  # @return [JSON] Success or error message.
   post '/api/register' do
     data = JSON.parse(request.body.read)
     username = data["username"]
@@ -89,12 +126,25 @@ end
     { message: "User registered successfully" }.to_json
   end
 
+  # @method POST
+  #
+  # POST /api/logout
+  #
+  # Logs the user out by clearing their session.
+  #
+  # @return [JSON] Confirmation message.
   post '/api/logout' do
       session.clear
       content_type :json
       { message: "Logged out" }.to_json
   end
 
+  # @method POST
+  #
+  # Deletes a user by ID along with their associated listings, if there is any.
+  #
+  # @param [Integer] id The user ID to delete.
+  # @return [JSON] Confirmation or error message.
   post '/api/users/:id/delete' do
 
     user = User.find_by("id", params[:id])
