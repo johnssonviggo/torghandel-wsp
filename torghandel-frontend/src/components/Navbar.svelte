@@ -52,7 +52,7 @@
 
 <nav class="flex justify-between bg-[#222831] h-30">
   <div
-    class="grid flex-1 ms-5 self-center text-md font-semibold underline text-[#EEEEEE]
+    class="grid flex-1 ms-5 self-center text-nowrap text-md font-semibold underline text-[#EEEEEE]
   sm:text-2xl sm:space-x-10 sm:flex"
   >
     <a href="/">Hem</a>
@@ -69,7 +69,7 @@
       </a>
       <!-- svelte-ignore a11y_invalid_attribute -->
       <a href="#" on:click={deleteUser} class=" text-[#EEEEEE] hover:text-2xl"
-        >Delete</a
+        >Delete Account</a
       >
     {/if}
   </div>

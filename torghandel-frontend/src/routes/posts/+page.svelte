@@ -110,7 +110,7 @@ sm:flex-row">
 
       <label class="text-[var(--gr-txt)] font-medium">
         Ladda upp bild:
-        <input type="file" on:change={handleFileChange}  accept="image/"
+        <input type="file" on:change={handleFileChange}  accept="image/*"
           class="border border-[var(--clr-border)] rounded-lg p-2 w-full mt-1 focus:outline-none focus:ring-2 focus:ring-[#222831]" />
       </label>
 

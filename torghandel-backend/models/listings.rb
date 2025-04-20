@@ -17,7 +17,7 @@ class Listing < Base
   #   @image = hash["image"]
   # end
 
-  
+
   # Returns the name of the table associated with this class.
   #
   # @return [String] the name of the table
@@ -36,7 +36,7 @@ class Listing < Base
     #omvandla listings som nu är en array av hashes till en array av listings-objekt (genom att anropa new)
 
     listings.each do |listing|
-      listing["image_url"] = listing["image"] ? "http://localhost:9292/img/#{listing['image']}" : "https://via.placeholder.com/150"
+      listing["image_url"] = listing["image"] != "" ? "http://localhost:9292/img/#{listing['image']}" : "https://placehold.co/150"
 
       tag_ids = Database.connection.execute("SELECT tag_id FROM listing_tags WHERE listing_id=?", [listing["id"]])
       tags = tag_ids.map do |tag_id|

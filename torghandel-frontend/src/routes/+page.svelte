@@ -57,7 +57,7 @@ console.log("Hello world!");
 </script>
 
 
-<main class=" flex flex-col items-center">
+<main class=" flex flex-col items-center mb-15">
   <link rel="preload" href="http://localhost:9292/api/listings">
   {#each message as item}
   {#if item.name}
