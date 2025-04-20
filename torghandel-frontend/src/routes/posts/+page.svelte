@@ -137,7 +137,7 @@ sm:flex-row">
       <span>Image Preview</span>
     {/if}
   </div>
-  <label class="ms-5 text-[var(--gr-txt)] font-medium">
+  <div class="ms-5 text-[var(--gr-txt)] font-medium">
     <div class="mx-5 my-5 max-w-3xl rounded-lg bg-[var(--clr-card)] p-6 text-lg text-[var(--gr-txt)] shadow-md flex flex-wrap items-center 
                 sm:mx-20 sm:mt-20 sm:mb-0">
       {#each availableTags as tag}
@@ -154,6 +154,6 @@ sm:flex-row">
 </button>
       {/each}
     </div>
-  </label>
+  </div>
 </div>
 
