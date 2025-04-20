@@ -4,12 +4,11 @@
   import { goto } from "$app/navigation"; // Import navigation helper
 
 
-  // let formData = { name: "", description: "", cost: "", image: null };
 
   let name = "";
   let description = "";
   let cost = "";
-  let imageFile = null; // Store selected image file
+  let imageFile = null;
   let showImage= false;
   let imgSrc = "";
   let availableTags = ["bil", "skräp", "mat", "möbler", "random", "elektronik", "kläder"];
@@ -20,7 +19,6 @@
   async function handleSubmit(event) {
     event.preventDefault();
 
-    // Create FormData to send the file
     const formData = new FormData();
     formData.append("name", name);
     formData.append("description", description);

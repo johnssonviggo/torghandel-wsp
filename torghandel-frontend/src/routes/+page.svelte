@@ -6,32 +6,34 @@
   import Navbar from "../components/Navbar.svelte";
   import { onMount } from "svelte";
   import { user, admin } from "../stores/user.js";
-  let message = "Loading...";
+  let message = [];
 
   let name = "";
   let description = "";
   let cost = "";
 
   onMount(async () => {
-    try {
-      const res = await fetch("http://localhost:9292/api/listings");
-      const data = await res.json();
-      message = data.content;
-    } catch (error) {
-      message = "Failed to fetch data";
-      console.error("Error fetching data:", error);
+  try {
+    const res = await fetch("http://localhost:9292/api/listings");
+    if (!res.ok) {
+      throw new Error("Failed to fetch data");
     }
-  });
+    const data = await res.json();
+    message = data.content || [];
+  } catch (error) {
+    console.error("Error fetching data:", error);
+    message = [];
+  }
+});
 
   // Delete function
   const deleteListing = async (id) => {
     try {
       const res = await fetch(`http://localhost:9292/api/listings/${id}/delete`, {
-        method: 'POST',  // You might use DELETE here too depending on your backend
+        method: 'POST',
       });
       const data = await res.json();
       if (data.message.includes("Listing deleted"))  {
-        // Filter out the deleted item from the `message` array
         message = [...message.filter(item => item.id !== id)];
 
       } else {
@@ -50,18 +52,22 @@ function logout() {
   user.set(null);
 }
 
-  console.log("Hello world!");
+console.log("Hello world!");
+
 </script>
 
+
 <main class=" flex flex-col items-center">
+  <link rel="preload" href="http://localhost:9292/api/listings">
   {#each message as item}
+  {#if item.name}
   <div class=" flex flex-col mt-15 p-5 bg-[var(--clr-card)] w-full max-w-[90vw] rounded-lg shadow-md items-center
   sm:flex-row sm:max-w-5xl">
     
     
     <!-- svelte-ignore a11y_img_redundant_alt -->
     <div class="flex-shrink-0">
-      <img class=" h-100 w-100 object-cover rounded-lg" src={item.image_url} alt="Item Image" />
+      <img class=" h-70 w-70 object-cover rounded-lg" src={item.image_url} alt="Item Image" loading="lazy"/>
     </div>
 
     <div class="flex flex-col ml-5 mt-4
@@ -93,9 +99,10 @@ function logout() {
           Ändra
         </button> 
       </div>
-    {/if}
+      {/if}
     </div>
   </div>
+  {/if}
   {/each}
 </main>
 

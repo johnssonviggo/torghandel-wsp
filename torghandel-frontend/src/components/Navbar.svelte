@@ -15,8 +15,8 @@
 
   function logout() {
     console.log("p");
-    $user = null;
-    $admin = null;
+    user.set(null);
+    admin.set(null);
     window.location.href = "/";
   }
 
@@ -57,7 +57,7 @@
   >
     <a href="/">Hem</a>
 
-    {#if mounted && !$user && !$admin}
+    {#if !$user && !$admin}
       <a href="/login">Logga in</a>
     {/if}
 
@@ -77,10 +77,10 @@
   <div
     class="flex-1 text-center text-[#EEEEEE] self-center text-lg sm:text-2xl"
   >
-    {#if mounted && $user}
+    {#if $user}
       <span>Hej, {$user.username}!</span>
     {/if}
-    {#if mounted && $admin}
+    {#if $admin}
       <span>Hej, {$admin.username}!</span>
     {/if}
   </div>

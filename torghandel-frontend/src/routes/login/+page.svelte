@@ -53,48 +53,6 @@
     console.error("Login error:", error);
   }
 }
-
-  //   async function login(event) {
-  //     event.preventDefault(); // Prevents form from reloading the page
-
-  //     console.log("Admin login:", isAdmin);
-  //     console.log("Sending request with username:", username);
-
-  //     const body = isAdmin
-  //     ? { admin_name: username, admin_password: password }
-  //     : { username, password }; // Ensure admin login sends the right field
-
-  //     const endpoint = isAdmin
-  //     ? "http://localhost:9292/api/admin/login"
-  //     : "http://localhost:9292/api/login";        
-      
-  //     const response = await fetch(endpoint, {
-  //           method: "POST",
-  //           headers: {
-  //               "Content-Type": "application/json",
-  //               "Accept": "application/json"},      
-  //           credentials: "include",
-  //           body: JSON.stringify(body)
-  //       });
-
-  //       const data = await response.json();
-
-  //       console.log(data);
-
-  //   if (response.ok) {
-  //     if (isAdmin) {
-  //       localStorage.setItem("admin", JSON.stringify(data.admin));
-  //     } else {
-  //       user.set(data.user);
-  //       console.log("User set to:", data.user);
-  //       console.log("banan");
-  //     }
-  //     message = "Login successful!";
-  //     await goto("/");
-  //   } else {
-  //     message = data.message || "doo doo, no access";
-  //   }
-  // }
 </script>
 
 <form on:submit={login}
