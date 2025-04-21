@@ -63,10 +63,6 @@ class UsersController < ApplicationController
 
     puts attempts
 
-    if attempts[:locked_until] && Time.now < attempts[:locked_until]
-      halt 429, { message: "Too many failed attempts. Try again later." }.to_json
-    end
-
     user = User.find_by("username", data["username"])
 
     puts "User from DB: #{user.inspect}"
@@ -89,6 +85,11 @@ class UsersController < ApplicationController
         content_type :json
         { message: "Login successful", user: { id: user['id'], username: user['username'] } }.to_json
     else
+
+    if attempts[:locked_until] && Time.now < attempts[:locked_until]
+      halt 429, { message: "Too many failed attempts. Try again later." }.to_json
+    end
+
       attempts[:count] += 1
       attempts[:last_attempt] = Time.now
 
