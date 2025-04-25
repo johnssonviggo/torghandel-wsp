@@ -51,29 +51,12 @@
 </script>
 
 <nav class="flex justify-between bg-[#222831] h-30">
+  
   <div
-    class="grid flex-1 ms-5 self-center text-nowrap text-md font-semibold underline text-[#EEEEEE]
-  sm:text-2xl sm:space-x-10 sm:flex"
+    class="flex-1 ms-5 self-center text-[#EEEEEE] text-xl font-bold sm:text-4xl"
   >
-    <a href="/">Hem</a>
-
-    {#if !$user && !$admin}
-      <a href="/login">Logga in</a>
-    {/if}
-
-    {#if mounted && ($user || $admin)}
-      <a href="/posts">Ladda upp</a>
-      <!-- svelte-ignore a11y_invalid_attribute -->
-      <a href="#" on:click={logout} class=" text-[#EEEEEE] hover:text-2xl">
-        Logga ut
-      </a>
-      <!-- svelte-ignore a11y_invalid_attribute -->
-      <a href="#" on:click={deleteUser} class=" text-[#EEEEEE] hover:text-2xl"
-        >Delete Account</a
-      >
-    {/if}
+    Torghandel
   </div>
-
   <div
     class="flex-1 text-center text-[#EEEEEE] self-center text-lg sm:text-2xl"
   >
@@ -86,8 +69,25 @@
   </div>
 
   <div
-    class="flex-1 text-end me-5 self-center text-[#EEEEEE] text-xl font-bold sm:text-4xl"
-  >
-    Torghandel
-  </div>
+  class="grid me-5 flex-1 self-center text-nowrap place-content-end right-0 text-md font-semibold underline text-[#EEEEEE]
+sm:text-2xl sm:space-x-10 sm:flex"
+>
+  <a href="/">Hem</a>
+
+  {#if !$user && !$admin}
+    <a href="/login">Logga in</a>
+  {/if}
+
+  {#if mounted && ($user || $admin)}
+    <a href="/posts">Ladda upp</a>
+    <!-- svelte-ignore a11y_invalid_attribute -->
+    <a href="#" on:click={logout} class=" text-[#EEEEEE] hover:text-2xl">
+      Logga ut
+    </a>
+    <!-- svelte-ignore a11y_invalid_attribute -->
+    <a href="#" on:click={deleteUser} class=" text-[#EEEEEE] hover:text-2xl"
+      >Delete Account</a
+    >
+  {/if}
+</div>
 </nav>
