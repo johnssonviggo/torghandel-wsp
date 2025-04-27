@@ -80,6 +80,12 @@ function toggleTag(tag) {
     }
   }
 </script>
+<svelte:head>
+  <title>Lägg upp annonser</title>
+  <meta name="description" content="Lägg upp dina saker på Torghandel här!">
+</svelte:head>
+
+<main>
 <div class=" flex flex-col
 sm:flex-row">
   <form 
@@ -138,7 +144,7 @@ sm:flex-row">
     {/if}
   </div>
   <div class="ms-5 text-[var(--gr-txt)] font-medium">
-    <div class="mx-5 my-5 max-w-3xl rounded-lg bg-[var(--clr-card)] p-6 text-lg text-[var(--gr-txt)] shadow-md flex flex-wrap items-center 
+    <div class="me-5 my-5 max-w-3xl rounded-lg bg-[var(--clr-card)] p-6 text-lg text-[var(--gr-txt)] shadow-md flex flex-wrap items-center 
                 sm:mx-20 sm:mt-20 sm:mb-0">
       {#each availableTags as tag}
       <button
@@ -156,4 +162,4 @@ sm:flex-row">
     </div>
   </div>
 </div>
-
+</main>

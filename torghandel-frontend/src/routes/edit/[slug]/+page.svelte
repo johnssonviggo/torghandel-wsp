@@ -83,9 +83,14 @@
 
 </script>
 
+<svelte:head>
+  <title>Ändra dina annonser</title>
+  <meta name="description" content="Ändra dina annonser på denna sidan">
+</svelte:head>
+
 <form
   on:submit={updateListing}
-  class="bg-[#EEEEEE] max-w-3xl p-6 rounded-lg shadow-md ml-5 mt-20"
+  class="bg-[#EEEEEE] max-w-3xl p-6 rounded-lg shadow-md mx-5 mt-20"
 >
   <div class="flex flex-col space-y-4">
     <label class="text-[#393E46] font-medium">

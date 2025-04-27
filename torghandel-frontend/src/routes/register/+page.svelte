@@ -42,6 +42,11 @@
     console.log(username)
 </script>
 
+<svelte:head>
+  <title>Registrera konto</title>
+  <meta name="description" content="Här registrerar vi konton på Torghandel">
+</svelte:head>
+
 <form on:submit={handleRegister}
   class=" bg-[var(--clr-card)] ml-5 mt-10 me-5 rounded-lg shadow-md text-lg max-w-3xl p-6
   sm:me-0 sm:mt-20"

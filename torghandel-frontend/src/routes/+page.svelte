@@ -56,9 +56,16 @@ console.log("Hello world!");
 
 </script>
 
+<svelte:head>
+  <title>Alla annonser - Torghandel</title>
+  <meta name="description" content="Kolla igenom alla annonser här på Torghandel">
+  {#if message.length > 0}
+    <link rel="preload" as="image" href={message[0].image_url}>
+  {/if}
+  <link rel="preload" href="http://localhost:9292/api/listings" as="fetch" crossorigin="anonymous">
+</svelte:head>
 
-<main class=" flex flex-col items-center mb-15">
-  <link rel="preload" href="http://localhost:9292/api/listings">
+<main class=" flex flex-col items-center mb-15" lang="en" title="posts">
   {#each message as item}
   {#if item.name}
   <div class=" flex flex-col mt-15 p-5 bg-[var(--clr-card)] w-full max-w-[90vw] rounded-lg shadow-md items-center
@@ -67,7 +74,7 @@ console.log("Hello world!");
     
     <!-- svelte-ignore a11y_img_redundant_alt -->
     <div class="flex-shrink-0">
-      <img class=" h-70 w-70 object-cover rounded-lg" src={item.image_url} alt="Item Image" loading="lazy"/>
+      <img class=" h-64 w-64 object-cover rounded-lg" src={item.image_url} alt="Item Image" loading="lazy"/>
     </div>
 
     <div class="flex flex-col ml-5 mt-4

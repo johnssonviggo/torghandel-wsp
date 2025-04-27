@@ -55,6 +55,11 @@
 }
 </script>
 
+<svelte:head>
+  <title>Logga in</title>
+  <meta name="description" content="Logga in med ditt konto på Torghandel här!">
+</svelte:head>
+
 <form on:submit={login}
   class=" bg-[var(--clr-card)] ml-5 mt-10 me-5 rounded-lg shadow-md text-lg max-w-3xl p-6
   sm:me-0 sm:mt-20"
