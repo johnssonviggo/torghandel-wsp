@@ -1,3 +1,5 @@
+require_relative 'database'
+
 ##
 # The Base class acts as a simple ORM superclass.
 # Subclasses must implement the `self.table_name` method to provide
@@ -16,11 +18,23 @@ class Base
     Database.connection.execute("SELECT * FROM #{table_name()} WHERE #{field} = ?", [value]).first
   end
 
-  
+  def self.find(value)
+    find_by("id", value)
+  end
+
+
   # Retrieves all records from the database table.
   #
   # @return [Array<Hash>] An array of all records as hashes.
   def self.all
     return Database.connection.execute("SELECT * FROM #{table_name()}")
   end
+
+  # Deletes a listing by its ID.
+  #
+  # @param id [Integer] the ID of the table_name to delete
+  def self.delete(id)
+    Database.connection.execute("DELETE FROM #{table_name} WHERE id=?", [id])
+  end
+
 end

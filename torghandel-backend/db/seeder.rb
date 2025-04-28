@@ -1,5 +1,6 @@
 require 'sqlite3'
 require 'bcrypt'
+require_relative "models/user"
 
 ##
 # Seeder class handles resetting and populating the database
@@ -83,10 +84,10 @@ class Seeder
   # @return [void]
   #
   def self.populate_tables
-    password_hashed = BCrypt::Password.create("d1npiZZ4!")
     admin_password_hashed = BCrypt::Password.create("Admin!1")
 
-    db.execute('INSERT INTO users (username, password) VALUES (?,?)', ["Viggo", password_hashed])
+    User.create("Viggo", "d1npiZZ4!")
+    #db.execute('INSERT INTO users (username, password) VALUES (?,?)', ["Viggo", password_hashed])
     @owner_id = db.last_insert_row_id
 
     # add first listing
@@ -119,6 +120,7 @@ class Seeder
     tag_names.each do |tag_name|
 
       #Check if tag exist
+
       tag = db.get_first_row('SELECT id FROM tags WHERE name=?', [tag_name])
 
       #if tag does not exist

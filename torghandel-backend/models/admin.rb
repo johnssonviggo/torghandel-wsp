@@ -15,7 +15,7 @@ require_relative 'database'
 class Admin < Base
 attr_accessor :id, :admin_name, :admin_password
 
-  
+
   # Creates a new Admin instance.
   #
   # @param id [Integer] The ID of the admin.

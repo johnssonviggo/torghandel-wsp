@@ -30,21 +30,12 @@ attr_accessor :id, :username, :password
     "users"
   end
 
-
   # Creates a new user with a securely hashed password.
   #
   # @param username [String] the desired username
   # @param password [String] the plaintext password (will be hashed)
   def self.create(username, password)
     hashed_password = BCrypt::Password.create(password)
-    Database.connection.execute('INSERT INTO users (username, password) VALUES (?, ?)', [username, hashed_password])
-  end
-
-  
-  # Deletes a user by ID.
-  #
-  # @param id [Integer] the ID of the user to delete
-  def self.delete(id)
-    Database.connection.execute('DELETE FROM users WHERE id = ?', [id])
+    Database.connection.execute("INSERT INTO #{table_name} (username, password) VALUES (?, ?)", [username, hashed_password])
   end
 end

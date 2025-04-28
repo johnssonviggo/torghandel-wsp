@@ -30,7 +30,8 @@ class Listing < Base
   #
   # @return [Array<Hash>] an array of listing hashes, each with additional `tags` and `image_url` keys.
   def self.all
-    listings = Database.connection.execute("SELECT * FROM #{table_name()}")
+
+    listings = super #Database.connection.execute("SELECT * FROM #{table_name()}")
     # convert_to_object_array
     # return object_array
     #omvandla listings som nu är en array av hashes till en array av listings-objekt (genom att anropa new)
@@ -47,15 +48,6 @@ class Listing < Base
 
     end
     return listings
-  end
-
-
-  # Finds a single listing by ID.
-  #
-  # @param id [Integer] the ID of the listing
-  # @return [Hash, nil] the listing hash if found, or nil
-  def self.find(id)
-    Database.connection.execute("SELECT * FROM #{table_name()} WHERE id=?", [id]).first
   end
 
 
@@ -87,6 +79,7 @@ class Listing < Base
         tag["id"]
       else
         Database.connection.execute('INSERT INTO tags (name) VALUES (?)', [tag_name])
+        #Tag.create(sdöslkfösdlkfdf)
         Database.connection.last_insert_row_id
       end
 
@@ -100,7 +93,7 @@ class Listing < Base
   #
   # @param id [Integer] the ID of the listing to delete
   def self.delete(id)
-    Database.connection.execute('DELETE FROM listings WHERE id=?', [id])
+    Database.connection.execute("DELETE FROM #{table_name} WHERE id=?", [id])
   end
 
 
