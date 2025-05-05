@@ -39,9 +39,9 @@ class Listing < Base
     listings.each do |listing|
       listing["image_url"] = listing["image"] != "" ? "http://localhost:9292/img/#{listing['image']}" : "https://placehold.co/150"
 
-      tag_ids = Database.connection.execute("SELECT tag_id FROM listing_tags WHERE listing_id=?", [listing["id"]])
+      tag_ids = db.execute("SELECT tag_id FROM listing_tags WHERE listing_id=?", [listing["id"]])
       tags = tag_ids.map do |tag_id|
-      Database.connection.get_first_row("SELECT name FROM tags WHERE id=?", [tag_id["tag_id"]])["name"]
+      db.get_first_row("SELECT name FROM tags WHERE id=?", [tag_id["tag_id"]])["name"]
       end
 
       listing["tags"] = tags
@@ -62,30 +62,28 @@ class Listing < Base
   #
   # @return [Integer] the ID of the newly created listing
   def self.create(name, description, cost, image, owner_id, tags = [])
-    Database.connection.execute('INSERT INTO listings (name, description, cost, image, owner_id) VALUES (?, ?, ?, ?, ?)',
+    db.execute('INSERT INTO listings (name, description, cost, image, owner_id) VALUES (?, ?, ?, ?, ?)',
                                 [name, description, cost, image, owner_id])
 
-    listing_id = Database.connection.last_insert_row_id
+    listing_id = db.last_insert_row_id
 
-  tag_array = if tags.is_a?(String)
-      tags.split(',').map(&:strip)
-    else
-      tags
-    end
-
-  tag_array.each do |tag_name|
-    tag = Database.connection.get_first_row('SELECT id FROM tags WHERE name = ?', [tag_name])
-    tag_id = if tag
-        tag["id"]
+    tag_array = if tags.is_a?(String)
+        tags.split(',').map(&:strip)
       else
-        Database.connection.execute('INSERT INTO tags (name) VALUES (?)', [tag_name])
-        #Tag.create(sdöslkfösdlkfdf)
-        Database.connection.last_insert_row_id
+        tags
       end
 
-    Database.connection.execute('INSERT OR IGNORE INTO listing_tags (listing_id, tag_id) VALUES (?, ?)', [listing_id, tag_id])
-  end
-    return listing_id
+    tag_array.each do |tag_name|
+      tag = db.get_first_row('SELECT id FROM tags WHERE name = ?', [tag_name])
+      tag_id = if tag
+          tag["id"]
+        else
+          db.execute('INSERT INTO tags (name) VALUES (?)', [tag_name])
+          db.last_insert_row_id
+        end
+
+      db.execute('INSERT OR IGNORE INTO listing_tags (listing_id, tag_id) VALUES (?, ?)', [listing_id, tag_id])
+    end
   end
 
 
@@ -93,7 +91,7 @@ class Listing < Base
   #
   # @param id [Integer] the ID of the listing to delete
   def self.delete(id)
-    Database.connection.execute("DELETE FROM #{table_name} WHERE id=?", [id])
+    db.execute("DELETE FROM #{table_name} WHERE id=?", [id])
   end
 
 
@@ -106,10 +104,10 @@ class Listing < Base
   # @param image [String, nil] new image if provided
   def self.update(id, name, description, cost, image = nil)
     if image
-        Database.connection.execute('UPDATE listings SET name=?, description=?, cost=?, image=? WHERE id=?',
+        db.execute('UPDATE listings SET name=?, description=?, cost=?, image=? WHERE id=?',
                                     [name, description, cost, image, id])
     else
-        Database.connection.execute('UPDATE listings SET name=?, description=?, cost=? WHERE id=?',
+        db.execute('UPDATE listings SET name=?, description=?, cost=? WHERE id=?',
                                     [name, description, cost, id])
     end
   end

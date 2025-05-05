@@ -9,13 +9,18 @@ require_relative 'database'
 #
 class Base
 
+  def self.db
+    Database.connection
+  end
+
+
   # Finds the first record in the database matching a specific field and value.
   #
   # @param field [String, Symbol] The name of the column to search by.
   # @param value [Object] The value to match in the specified field.
   # @return [Hash, nil] The first matching record as a hash, or nil if none found.
   def self.find_by(field, value)
-    Database.connection.execute("SELECT * FROM #{table_name()} WHERE #{field} = ?", [value]).first
+    db.execute("SELECT * FROM #{table_name()} WHERE #{field} = ?", [value]).first
   end
 
   def self.find(value)
@@ -27,14 +32,14 @@ class Base
   #
   # @return [Array<Hash>] An array of all records as hashes.
   def self.all
-    return Database.connection.execute("SELECT * FROM #{table_name()}")
+    db.execute("SELECT * FROM #{table_name()}")
   end
 
   # Deletes a listing by its ID.
   #
   # @param id [Integer] the ID of the table_name to delete
   def self.delete(id)
-    Database.connection.execute("DELETE FROM #{table_name} WHERE id=?", [id])
+    db.execute("DELETE FROM #{table_name} WHERE id=?", [id])
   end
 
 end

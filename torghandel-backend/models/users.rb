@@ -7,8 +7,7 @@ require_relative 'base'
 # It inherits common ORM-like functionality from the `Base` class and adds custom create and delete methods.
 #
 class User < Base
-attr_accessor :id, :username, :password
-
+  attr_accessor :id, :username, :password
 
   # Initializes a new User instance.
   #
@@ -19,7 +18,6 @@ attr_accessor :id, :username, :password
     @id = id
     @username = username
     @password = password
-    var = "users"
   end
 
 
@@ -36,6 +34,7 @@ attr_accessor :id, :username, :password
   # @param password [String] the plaintext password (will be hashed)
   def self.create(username, password)
     hashed_password = BCrypt::Password.create(password)
-    Database.connection.execute("INSERT INTO #{table_name} (username, password) VALUES (?, ?)", [username, hashed_password])
+    db.execute("INSERT INTO #{table_name} (username, password) VALUES (?, ?)", [username, hashed_password])
+    db.last_insert_row_id
   end
 end

@@ -7,7 +7,7 @@ require 'sqlite3'
 # This class ensures that only one instance of the database connection is created and reused.
 #
 class Database
-  
+
   # Returns the SQLite3 database connection. If the connection has not been
   # established yet, it will create a new one and enable hash-style result access.
   #
@@ -17,6 +17,8 @@ class Database
 
     @db = SQLite3::Database.new("db/listings.sqlite")
     @db.results_as_hash = true
+    @db.execute("PRAGMA foreign_keys = ON;")
+
 
     return @db
   end

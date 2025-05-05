@@ -51,7 +51,7 @@ attr_accessor :id, :admin_name, :admin_password
   # @param admin_name [String] The name/username of the new admin.
   # @param admin_password [String] The plaintext password to hash and store.
   # @return [void]
-  def self.create(admin_name, admin_password) #is not used
+  def self.create(admin_name, admin_password)
     admin_password_hashed = BCrypt::Password.create(admin_password)
     Database.connection.execute('INSERT INTO admin (admin_name, admin_password) VALUES (?, ?)', [admin_name, admin_password_hashed])
   end

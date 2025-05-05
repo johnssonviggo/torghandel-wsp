@@ -1,6 +1,8 @@
 require 'sqlite3'
 require 'bcrypt'
-require_relative "models/user"
+require_relative "../models/users"
+require_relative "../models/listings"
+require_relative "../models/admin"
 
 ##
 # Seeder class handles resetting and populating the database
@@ -84,28 +86,21 @@ class Seeder
   # @return [void]
   #
   def self.populate_tables
-    admin_password_hashed = BCrypt::Password.create("Admin!1")
 
-    User.create("Viggo", "d1npiZZ4!")
-    #db.execute('INSERT INTO users (username, password) VALUES (?,?)', ["Viggo", password_hashed])
-    @owner_id = db.last_insert_row_id
+    @owner_id = User.create("Viggo", "d1npiZZ4!")
+    Admin.create("Admin", "Admin!1")
 
     # add first listing
-    db.execute('INSERT INTO listings (name, description, cost, image, owner_id) VALUES (?,?,?,?,?)',
-    ["GAMMAL SAAB", "Rostig men fungerar fantastiskt", "10000", "garbage_truck.jpg", @owner_id])
+    listing_id = Listing.create("GAMMAL SAAB", "Rostig men fungerar fantastiskt", "10000", "garbage_truck.jpg", @owner_id)
 
     listing_id = db.last_insert_row_id
     add_tags_to_listing(listing_id, ["bil", "skräp"])
 
     # add second listing
-    db.execute('INSERT INTO listings (name, description, cost, image, owner_id) VALUES (?,?,?,?,?)',
-    ["BANANSKAL", "Gult skal", "100000", "", @owner_id])
+    listing_id = Listing.create("BANANSKAL", "Gult skal", "100000", "", @owner_id)
 
     listing_id = db.last_insert_row_id
     add_tags_to_listing(listing_id, ["mat", "skräp"])
-
-    db.execute('INSERT OR IGNORE INTO admin (admin_name, admin_password) VALUES (?,?)', ["Admin", admin_password_hashed])
-
   end
 
 
@@ -133,6 +128,8 @@ class Seeder
       end
 
       #Link tag to listing
+      p listing_id
+      p tag_id
       db.execute('INSERT INTO listing_tags (listing_id, tag_id) VALUES (?,?)', [listing_id, tag_id])
     end
   end
@@ -146,12 +143,15 @@ class Seeder
   # @return [SQLite3::Database] configured SQLite3 connection
   #
   def self.db
-    return @db if @db
+    Database.connection
 
-    @db = SQLite3::Database.new('db/listings.sqlite')
-    @db.results_as_hash = true
-    @db.execute("PRAGMA foreign_keys = ON;")
-    @db
+
+    # return @db if @db
+
+    # @db = SQLite3::Database.new('db/listings.sqlite')
+    # @db.results_as_hash = true
+    # @db.execute("PRAGMA foreign_keys = ON;")
+    # @db
   end
 end
 

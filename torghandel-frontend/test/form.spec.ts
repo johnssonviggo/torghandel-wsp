@@ -1,5 +1,8 @@
 import { test, expect } from '@playwright/test';
 
+const $username = `user-${Date.now()}`;
+const $password = 'hemligt123';
+
 function sleep(ms: number) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
@@ -44,28 +47,36 @@ test('borde navigera från frontend till Logga in sida, sen till registrera sida
 
   await expect(page).toHaveURL(/.*\/register/);
 
-  const username = `användare`;
-  const password = 'hemligt123';
 
   // 3. Fyll i formuläret på registrera sidan
-  await page.getByPlaceholder('Username').fill(username);
-  await page.getByPlaceholder('Password').fill(password);
+  await page.getByPlaceholder('Username').fill($username);
+  await page.getByPlaceholder('Password').fill($password);
   await page.getByRole('button', { name: 'Registrera' }).click();
 
   await expect(page).toHaveURL(/.*\/login/);
 
-  console.log(`Registered user: ${username} with password: ${password}`);
-});
+  console.log(`Registered user: ${$username} with password: ${$password}`);
 
-test('Ska navigera till login sidan igen och fylla i logga in formuläret för att sedan trycka på logga in knappen', async ({ page }) => {
   await page.goto('http://localhost:5173/login');
 
-  const username = 'användare';
-  const password = 'hemligt123';
-
-  await page.getByPlaceholder('Username').fill(username);
-  await page.getByPlaceholder('Password').fill(password);
+  await page.getByPlaceholder('Username').fill($username);
+  await page.getByPlaceholder('Password').fill($password);
   
   await page.getByRole('button', { name: 'Logga in' }).click();
+
+  console.log(`Inloggad som: ${$username} / ${$password}`);
+
+  const element = page.getByText(`Hej, ${$username}!`);
+  console.log(element)
+  await expect(element).toBeVisible();
+
+  const deleteLink = page.getByRole('link', { name: 'Delete Account' });
+  await expect(deleteLink).toBeVisible();
+  await deleteLink.click();
+
+  await page.reload();
+
+  await expect(loginLink).toBeVisible();
 });
+
 
