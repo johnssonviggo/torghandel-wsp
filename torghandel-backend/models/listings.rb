@@ -1,4 +1,5 @@
 require_relative 'database'
+require_relative 'tags'
 
 
 ##
@@ -61,29 +62,14 @@ class Listing < Base
   # @param tags [Array<String>, String] tags as an array or comma-separated string
   #
   # @return [Integer] the ID of the newly created listing
-  def self.create(name, description, cost, image, owner_id, tags = [])
+  def self.create(name, description, cost, image, owner_id, tag_array)
     db.execute('INSERT INTO listings (name, description, cost, image, owner_id) VALUES (?, ?, ?, ?, ?)',
                                 [name, description, cost, image, owner_id])
 
     listing_id = db.last_insert_row_id
 
-    tag_array = if tags.is_a?(String)
-        tags.split(',').map(&:strip)
-      else
-        tags
-      end
 
-    tag_array.each do |tag_name|
-      tag = db.get_first_row('SELECT id FROM tags WHERE name = ?', [tag_name])
-      tag_id = if tag
-          tag["id"]
-        else
-          db.execute('INSERT INTO tags (name) VALUES (?)', [tag_name])
-          db.last_insert_row_id
-        end
-
-      db.execute('INSERT OR IGNORE INTO listing_tags (listing_id, tag_id) VALUES (?, ?)', [listing_id, tag_id])
-    end
+    Tag.create(tag_array, listing_id)
   end
 
 

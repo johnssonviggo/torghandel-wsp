@@ -42,4 +42,5 @@ class Base
     db.execute("DELETE FROM #{table_name} WHERE id=?", [id])
   end
 
+
 end

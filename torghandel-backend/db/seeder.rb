@@ -10,7 +10,6 @@ require_relative "../models/admin"
 #
 class Seeder
 
-
   # Main method to initialize the full seed process:
   # Drops all existing tables, creates fresh ones, and populates them with starter data.
   #
@@ -23,7 +22,6 @@ class Seeder
 
     p "doit"
   end
-
 
   # Drops all tables if they exist.
   # Tables: 'listing_tags', 'listings', 'tags', 'users', 'admin'
@@ -39,7 +37,6 @@ class Seeder
     db.execute('DROP TABLE IF EXISTS admin')
 
   end
-
 
   # Creates all the tables for the application:
   # 'users', 'listings', 'admin', 'tags', 'listing_tags'
@@ -79,7 +76,6 @@ class Seeder
           )')
   end
 
-
   # Populates the database with example users, listings, and tags.
   # Also hashes and inserts user and admin credentials.
   #
@@ -91,16 +87,16 @@ class Seeder
     Admin.create("Admin", "Admin!1")
 
     # add first listing
-    listing_id = Listing.create("GAMMAL SAAB", "Rostig men fungerar fantastiskt", "10000", "garbage_truck.jpg", @owner_id)
+    Listing.create("GAMMAL SAAB", "Rostig men fungerar fantastiskt", "10000", "garbage_truck.jpg", @owner_id, ["bil", "skräp"])
 
-    listing_id = db.last_insert_row_id
-    add_tags_to_listing(listing_id, ["bil", "skräp"])
+    # listing_id = db.last_insert_row_id
+    # add_tags_to_listing(listing_id, ["bil", "skräp"])
 
-    # add second listing
-    listing_id = Listing.create("BANANSKAL", "Gult skal", "100000", "", @owner_id)
+    # # add second listing
+    Listing.create("BANANSKAL", "Gult skal", "100000", "", @owner_id, ["mat", "skräp"])
 
-    listing_id = db.last_insert_row_id
-    add_tags_to_listing(listing_id, ["mat", "skräp"])
+    # listing_id = db.last_insert_row_id
+    # add_tags_to_listing(listing_id, ["mat", "skräp"])
   end
 
 
@@ -111,32 +107,11 @@ class Seeder
   # @param tag_names [Array<String>] list of tag names to associate
   # @return [void]
   #
-  def self.add_tags_to_listing(listing_id, tag_names)
-    tag_names.each do |tag_name|
-
-      #Check if tag exist
-
-      tag = db.get_first_row('SELECT id FROM tags WHERE name=?', [tag_name])
-
-      #if tag does not exist
-      tag_id =
-      if tag
-        tag["id"]
-      else
-        db.execute('INSERT INTO tags (name) VALUES (?)', [tag_name])
-        db.last_insert_row_id
-      end
-
-      #Link tag to listing
-      p listing_id
-      p tag_id
-      db.execute('INSERT INTO listing_tags (listing_id, tag_id) VALUES (?,?)', [listing_id, tag_id])
-    end
-  end
+  # def self.add_tags_to_listing(listing_id, tag_names)
+  #  Listing.create
+  # end
 
   private
-
-
   # Returns or initializes the SQLite database connection.
   # Ensures foreign key support is enabled and results are returned as hashes.
   #
@@ -144,14 +119,6 @@ class Seeder
   #
   def self.db
     Database.connection
-
-
-    # return @db if @db
-
-    # @db = SQLite3::Database.new('db/listings.sqlite')
-    # @db.results_as_hash = true
-    # @db.execute("PRAGMA foreign_keys = ON;")
-    # @db
   end
 end
 
