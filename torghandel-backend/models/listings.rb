@@ -1,7 +1,6 @@
 require_relative 'database'
 require_relative 'tags'
 
-
 ##
 # The Listing class provides methods to interact with the `listings` table in the database.
 # It includes CRUD operations and manages associations between listings and tags.
@@ -10,22 +9,12 @@ require_relative 'tags'
 #
 class Listing < Base
 
-  # def initialize(hash)
-  #   @id = hash["id"]
-  #   @name = hash["name"]
-  #   @description = hash["description"]
-  #   @cost = hash["cost"]
-  #   @image = hash["image"]
-  # end
-
-
   # Returns the name of the table associated with this class.
   #
   # @return [String] the name of the table
   def self.table_name
     "listings"
   end
-
 
   # Fetches all listings from the database, and appends associated tags and image URLs to each listing.
   #
@@ -50,7 +39,6 @@ class Listing < Base
     end
     return listings
   end
-
 
   # Creates a new listing with optional tags.
   #
@@ -80,7 +68,6 @@ class Listing < Base
     db.execute("DELETE FROM #{table_name} WHERE id=?", [id])
   end
 
-
   # Updates an existing listing.
   #
   # @param id [Integer] the listing ID
@@ -89,6 +76,7 @@ class Listing < Base
   # @param cost [Numeric] new cost
   # @param image [String, nil] new image if provided
   def self.update(id, name, description, cost, image = nil)
+
     if image
         db.execute('UPDATE listings SET name=?, description=?, cost=?, image=? WHERE id=?',
                                     [name, description, cost, image, id])

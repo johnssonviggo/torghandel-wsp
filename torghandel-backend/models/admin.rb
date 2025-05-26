@@ -1,5 +1,6 @@
 require 'bcrypt'
 require_relative 'database'
+require_relative '../controller/admin_controller'
 
 ##
 # Represents an Admin user in the application. Inherits from Base.
@@ -27,24 +28,12 @@ attr_accessor :id, :admin_name, :admin_password
     @admin_password = admin_password
   end
 
-
-
   # REturns the table_name admin
   #
   # @return the name of the table
   def self.table_name
     "admin"
   end
-
-
-  # def self.all
-  #   return Database.connection.execute("SELECT * FROM #{table_name}")
-  # end
-
-  # def self.find_by_username(admin_name)
-  #   Database.connection.execute('SELECT * FROM admin WHERE admin_name=?', [admin_name]).first
-  # end
-
 
   # Creates a new admin user in the database with a securely hashed password.
   #
@@ -55,4 +44,5 @@ attr_accessor :id, :admin_name, :admin_password
     admin_password_hashed = BCrypt::Password.create(admin_password)
     Database.connection.execute('INSERT INTO admin (admin_name, admin_password) VALUES (?, ?)', [admin_name, admin_password_hashed])
   end
+
 end

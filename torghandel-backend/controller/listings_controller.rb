@@ -63,7 +63,6 @@ class ListingsController < ApplicationController
     tag_string = params["tags"] || "" #example skräp, bil
     tags = tag_string.split(',').map(&:strip).reject(&:empty?)
 
-
     p owner_id
     p "session[:user_id] is #{session[:user_id]}"
 
@@ -112,9 +111,6 @@ class ListingsController < ApplicationController
   # @return [JSON] A confirmation message.
   #
   post '/api/listings/:id/update' do
-    # halt 401, { message: "Unauthorized" }.to_json unless session[:admin_id]
-
-    p params.inspect
 
     name = params[:name]
     description = params[:description]

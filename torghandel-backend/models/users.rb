@@ -20,7 +20,6 @@ class User < Base
     @password = password
   end
 
-
   # Returns the name of the associated table in the database.
   #
   # @return [String] the table name ("users")

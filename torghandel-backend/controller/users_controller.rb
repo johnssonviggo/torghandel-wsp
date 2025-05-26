@@ -114,6 +114,7 @@ end
     password = data["password"]
 
     existing_user = User.find_by("username", data["username"])
+    
     if existing_user
         halt 400, { message: "Username already exists" }.to_json
     end

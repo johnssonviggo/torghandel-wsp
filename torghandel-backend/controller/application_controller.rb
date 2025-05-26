@@ -21,8 +21,7 @@ class ApplicationController < Sinatra::Base
                                path: "/",
                                secret: ENV["SESSION_SECRET"]
 
-
-
+                               
   # Configuration block that enables CORS and defines allowed origins, methods, and headers.
   configure do
     enable :cross_origin

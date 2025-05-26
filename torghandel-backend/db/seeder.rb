@@ -89,27 +89,9 @@ class Seeder
     # add first listing
     Listing.create("GAMMAL SAAB", "Rostig men fungerar fantastiskt", "10000", "garbage_truck.jpg", @owner_id, ["bil", "skräp"])
 
-    # listing_id = db.last_insert_row_id
-    # add_tags_to_listing(listing_id, ["bil", "skräp"])
-
     # # add second listing
     Listing.create("BANANSKAL", "Gult skal", "100000", "", @owner_id, ["mat", "skräp"])
-
-    # listing_id = db.last_insert_row_id
-    # add_tags_to_listing(listing_id, ["mat", "skräp"])
   end
-
-
-  # Links tag names to a given listing by inserting records
-  # into `tags` and `listing_tags` tables.
-  #
-  # @param listing_id [Integer] the ID of the listing
-  # @param tag_names [Array<String>] list of tag names to associate
-  # @return [void]
-  #
-  # def self.add_tags_to_listing(listing_id, tag_names)
-  #  Listing.create
-  # end
 
   private
   # Returns or initializes the SQLite database connection.

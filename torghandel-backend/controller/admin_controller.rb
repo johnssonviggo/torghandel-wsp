@@ -24,7 +24,6 @@ class AdminController < ApplicationController
 
     admin = Admin.find_by("admin_name", data["admin_name"])
 
-
     if admin
       p "Admin found: #{admin}"
       p "detta är bra"
